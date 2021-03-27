@@ -111,6 +111,10 @@ def createObjects(window):
     createWordTypeAddition(frame_wordTypeAddition)
 
     # set position for definition
+    frame_definition = Frame(window)
+    frame_definition.pack(fill=X, padx=6, pady=4)
+
+    createDefinition(frame_definition)
 
 def main():
     # create a tkinter window
