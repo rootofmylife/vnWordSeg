@@ -82,6 +82,16 @@ def createDefinition(window):
     textIndependent = Text(window, height=10)
     textIndependent.pack(fill=X)
 
+def createImage(window):
+    labelSelectImage = Label(window, text="Chọn hình ảnh cần xem")
+    labelSelectImage.pack(fill=X)
+
+    labelImage = Label(window, text="Image")
+    labelImage.pack(fill=X, side=LEFT)
+
+    listbox_image = Listbox(window, height=10)
+    listbox_image.pack(side=LEFT)
+
 def createObjects(window):
     # pack is used to show the object in the window
     tkinter.Label(window, text = "Chào mừng đến với Từ điển Tiếng Việt").pack()
@@ -115,6 +125,12 @@ def createObjects(window):
     frame_definition.pack(fill=X, padx=6, pady=4)
 
     createDefinition(frame_definition)
+
+    # set position for image
+    frame_image = Frame(window)
+    frame_image.pack(expand=True, padx=6, pady=4)
+
+    createImage(frame_image)
 
 def main():
     # create a tkinter window
