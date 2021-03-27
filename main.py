@@ -27,8 +27,8 @@ def createMenu(window):
 
     # Adding Help Menu
     help_ = Menu(menubar, tearoff = 0)
-    help_.add_command(label ='About Tk', command = None)
-    menubar.add_cascade(label ='Help', menu = help_)
+    help_.add_command(label='About Tk', command=None)
+    menubar.add_cascade(label='Help', menu=help_)
 
     window.config(menu=menubar)
 
@@ -44,6 +44,19 @@ def createSearchBar(window):
     entry.insert(0, "Nhập từ cần tìm...")
     str_unbind = entry.bind("<Button>", lambda event: deleteText(event, entry))
     entry.pack(fill=X)
+
+def createWordClass(window):
+    labelIndependent = Label(window, text="Độc lập")
+    labelIndependent.pack(fill=X)
+
+    textIndependent = Text(window, height=10)
+    textIndependent.pack(fill=X)
+
+    labelDependent = Label(window, text="Không độc lập")
+    labelDependent.pack(fill=X)
+
+    textDependent = Text(window, height=10)
+    textDependent.pack(fill=X)
     
 def createObjects(window):
     # pack is used to show the object in the window
@@ -51,10 +64,17 @@ def createObjects(window):
 
     createMenu(window)
 
-    frame = Frame(window, relief=RAISED)
-    frame.pack(fill=X, padx=6, pady=4)
+    # Set position for search bar
+    frame_searchBar = Frame(window, relief=RAISED)
+    frame_searchBar.pack(fill=X, padx=6, pady=4)
 
-    createSearchBar(frame)
+    createSearchBar(frame_searchBar)
+
+    # set position for word class
+    frame_wordClass = Frame(window)
+    frame_wordClass.pack(fill=X, padx=6, pady=4)
+
+    createWordClass(frame_wordClass)
 
 def main():
     # create a tkinter window
