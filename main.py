@@ -76,11 +76,11 @@ def createWordTypeAddition(window):
     listbox_fourMorpho.pack(side=LEFT)
 
 def createDefinition(window):
-    labelIndependent = Label(window, text="Định ngĩa")
-    labelIndependent.pack(fill=X)
+    labelDefinition = Label(window, text="Định ngĩa")
+    labelDefinition.pack(fill=X)
 
-    textIndependent = Text(window, height=10)
-    textIndependent.pack(fill=X)
+    textDefinition = Text(window, height=10)
+    textDefinition.pack(fill=X)
 
 def createImage(window):
     labelSelectImage = Label(window, text="Chọn hình ảnh cần xem")
@@ -91,6 +91,13 @@ def createImage(window):
 
     listbox_image = Listbox(window, height=10)
     listbox_image.pack(side=LEFT)
+
+def createNote(window):
+    labelNote = Label(window, text="Ghi chú")
+    labelNote.pack(fill=X)
+
+    textNote = Text(window, height=10)
+    textNote.pack(fill=X)
 
 def createObjects(window):
     # pack is used to show the object in the window
@@ -131,6 +138,12 @@ def createObjects(window):
     frame_image.pack(expand=True, padx=6, pady=4)
 
     createImage(frame_image)
+
+    # set position for notes
+    frame_note = Frame(window)
+    frame_note.pack(fill=X, padx=6, pady=4)
+
+    createNote(frame_note)
 
 def main():
     # create a tkinter window
