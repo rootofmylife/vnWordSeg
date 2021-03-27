@@ -57,12 +57,34 @@ def createWordClass(window):
 
     textDependent = Text(window, height=10)
     textDependent.pack(fill=X)
-    
+
+def createWordType(window):
+    listbox_oneMorpho = Listbox(window, height=20)
+    listbox_oneMorpho.pack(side=LEFT)
+
+    listbox_twoMorpho = Listbox(window, height=20)
+    listbox_twoMorpho.pack(side=LEFT)
+
+    listbox_twoReversedMorpho = Listbox(window, height=20)
+    listbox_twoReversedMorpho.pack(side=LEFT)
+
+def createWordTypeAddition(window):
+    listbox_threeMorpho = Listbox(window, height=20)
+    listbox_threeMorpho.pack(side=LEFT)
+
+    listbox_fourMorpho = Listbox(window, height=20)
+    listbox_fourMorpho.pack(side=LEFT)
+
+def createDefinition(window):
+    labelIndependent = Label(window, text="Định ngĩa")
+    labelIndependent.pack(fill=X)
+
+    textIndependent = Text(window, height=10)
+    textIndependent.pack(fill=X)
+
 def createObjects(window):
     # pack is used to show the object in the window
     tkinter.Label(window, text = "Chào mừng đến với Từ điển Tiếng Việt").pack()
-
-    createMenu(window)
 
     # Set position for search bar
     frame_searchBar = Frame(window, relief=RAISED)
@@ -75,6 +97,20 @@ def createObjects(window):
     frame_wordClass.pack(fill=X, padx=6, pady=4)
 
     createWordClass(frame_wordClass)
+
+    # set position for word type
+    frame_wordType = Frame(window)
+    frame_wordType.pack(expand=True, padx=6, pady=4)
+
+    createWordType(frame_wordType)
+
+    # set position for word type
+    frame_wordTypeAddition = Frame(window)
+    frame_wordTypeAddition.pack(expand=True, padx=6, pady=4)
+
+    createWordTypeAddition(frame_wordTypeAddition)
+
+    # set position for definition
 
 def main():
     # create a tkinter window
@@ -89,7 +125,35 @@ def main():
     # to rename the title of the window
     window.title("Từ điển tiếng Việt")
 
-    createObjects(window)
+    createMenu(window)
+
+    container = Frame(window)
+    canvas = Canvas(container)
+    scrollbar = Scrollbar(container, orient="vertical", command=canvas.yview)
+    scrollable_frame = Frame(canvas)
+
+    scrollable_frame.bind(
+        "<Configure>",
+        lambda e: canvas.configure(
+            scrollregion=canvas.bbox("all")
+        )
+    )
+
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", tags="my_tag")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    canvas.bind(
+        "<Configure>", 
+        lambda e: canvas.itemconfig(
+            "my_tag", width=e.width
+        )
+    )
+
+    createObjects(scrollable_frame)
+
+    container.pack(fill=BOTH, expand=True)
+    canvas.pack(side=LEFT, fill=BOTH, expand=True)
+    scrollbar.pack(side=RIGHT, fill=BOTH)
 
     # Start to run window
     window.mainloop()
