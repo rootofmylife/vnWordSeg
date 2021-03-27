@@ -59,21 +59,21 @@ def createWordClass(window):
     textDependent.pack(fill=X)
 
 def createWordType(window):
-    listbox_oneMorpho = Listbox(window, height=20)
-    listbox_oneMorpho.pack(side=LEFT)
+    listboxOneMorpho = Listbox(window, height=20)
+    listboxOneMorpho.pack(side=LEFT)
 
-    listbox_twoMorpho = Listbox(window, height=20)
-    listbox_twoMorpho.pack(side=LEFT)
+    listboxTwoMorpho = Listbox(window, height=20)
+    listboxTwoMorpho.pack(side=LEFT)
 
-    listbox_twoReversedMorpho = Listbox(window, height=20)
-    listbox_twoReversedMorpho.pack(side=LEFT)
+    listboxTwoReversedMorpho = Listbox(window, height=20)
+    listboxTwoReversedMorpho.pack(side=LEFT)
 
 def createWordTypeAddition(window):
-    listbox_threeMorpho = Listbox(window, height=20)
-    listbox_threeMorpho.pack(side=LEFT)
+    listboxThreeMorpho = Listbox(window, height=20)
+    listboxThreeMorpho.pack(side=LEFT)
 
-    listbox_fourMorpho = Listbox(window, height=20)
-    listbox_fourMorpho.pack(side=LEFT)
+    listboxFourMorpho = Listbox(window, height=20)
+    listboxFourMorpho.pack(side=LEFT)
 
 def createDefinition(window):
     labelDefinition = Label(window, text="Định ngĩa")
@@ -89,8 +89,8 @@ def createImage(window):
     labelImage = Label(window, text="Image")
     labelImage.pack(fill=X, side=LEFT)
 
-    listbox_image = Listbox(window, height=10)
-    listbox_image.pack(side=LEFT)
+    listboxImage = Listbox(window, height=10)
+    listboxImage.pack(side=LEFT)
 
 def createNote(window):
     labelNote = Label(window, text="Ghi chú")
@@ -98,6 +98,17 @@ def createNote(window):
 
     textNote = Text(window, height=10)
     textNote.pack(fill=X)
+
+def createForeign(window):
+    labelForeign = Label(window, text="Ngôn ngữ khác")
+    labelForeign.pack(fill=X)
+
+    listboxForeign = Listbox(window, height=8)
+    listboxForeign.pack(side=LEFT)
+
+    textForeign = Text(window, height=10)
+    textForeign.pack(side=LEFT, padx=6)
+
 
 def createObjects(window):
     # pack is used to show the object in the window
@@ -141,9 +152,15 @@ def createObjects(window):
 
     # set position for notes
     frame_note = Frame(window)
-    frame_note.pack(fill=X, padx=6, pady=4)
+    frame_note.pack(expand=True, padx=6, pady=4)
 
     createNote(frame_note)
+
+    # set position for foreign
+    frame_foreign = Frame(window)
+    frame_foreign.pack(expand=True, padx=6, pady=6)
+
+    createForeign(frame_foreign)
 
 def main():
     # create a tkinter window
