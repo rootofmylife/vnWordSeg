@@ -1,212 +1,258 @@
 import tkinter
 from tkinter import * 
+from tkinter.font import Font
 
-str_unbind = ""
+import sqlite3
+from sqlite3 import Error
+
 
 def getHalfWindowSize(window):
-    return int(window.winfo_screenwidth() / 2), int(window.winfo_screenheight() / 2)
+    return int(window.winfo_screenwidth() / 2), int(window.winfo_screenheight() / 1)
 
 def getCoordinate(window, width, height):
     return int((window.winfo_screenwidth() / 2) - (width / 2)), int((window.winfo_screenheight() / 2) - (height / 2))
 
-# def createMenu(window):
-#     # Menu
-#     menubar = Menu(window)
+def createConnection(db_file):
+    """ create a database connection to the SQLite database
+        specified by the db_file
+    :param db_file: database file
+    :return: Connection object or None
+    """
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+    except Error as e:
+        print(e)
 
-#     file = Menu(menubar, tearoff=0)  
-#     file.add_command(label="New")  
-#     file.add_command(label="Open")  
-#     file.add_command(label="Save")  
-#     file.add_command(label="Save as...")  
-#     file.add_command(label="Close") 
-#     file.add_separator()  
-#     file.add_command(label="Exit", command=window.quit)  
-#     menubar.add_cascade(label="File", menu=file)
+    return conn
 
-#     # Adding Help Menu
-#     help_ = Menu(menubar, tearoff = 0)
-#     help_.add_command(label='About Tk', command=None)
-#     menubar.add_cascade(label='Help', menu=help_)
+def queryKeyword(conn, keyword):
+    if len(keyword) > 0:
+        listOneMorpho = []
+        listTwoMorpho = []
+        listReversedTwoMorpho = []
+        listThreeMorpho = []
+        listFourMorpho = []
+        listOthersMorpho = []
 
-#     window.config(menu=menubar)
+        listboxOneMorpho.delete(0, END)
+        listboxTwoMorpho.delete(0, END)
+        listboxTwoReversedMorpho.delete(0, END)
+        listboxThreeMorpho.delete(0, END)
+        listboxFourMorpho.delete(0, END)
+        listboxOthersMorpho.delete(0, END)
+
+        cur = conn.cursor()
+        row = cur.execute(f"""SELECT * FROM dict WHERE word MATCH '{keyword}' """).fetchall()
+        cur.close()
+
+        for item in row:
+            word = item[0]
+            pos = item[1]
+            definition = item[2]
+
+            if keyword in word:
+                if len(word.strip().split()) == 1:
+                    listOneMorpho.append(item)
+                elif len(word.strip().split()) == 2:
+                    if word.strip().startswith(keyword):
+                        listTwoMorpho.append(item)
+                    else:
+                        listReversedTwoMorpho.append(item)
+                elif len(word.strip().split()) == 3:
+                    listThreeMorpho.append(item)
+                elif len(word.strip().split()) == 4:
+                    listFourMorpho.append(item)
+                else:
+                    listOthersMorpho.append(item)
+
+        for oneIndex, oneItem in enumerate(listOneMorpho):
+            listboxOneMorpho.insert(oneIndex + 1, oneItem[0])
+
+        for twoIndex, twoItem in enumerate(listTwoMorpho):
+            listboxTwoMorpho.insert(twoIndex + 1, twoItem[0])
+
+        for rtwoIndex, rtwoItem in enumerate(listReversedTwoMorpho):
+            listboxTwoReversedMorpho.insert(rtwoIndex + 1, rtwoItem[0])
+
+        for threeIndex, threeItem in enumerate(listThreeMorpho):
+            listboxThreeMorpho.insert(threeIndex + 1, threeItem[0])
+
+        for fourIndex, fourItem in enumerate(listFourMorpho):
+            listboxFourMorpho.insert(fourIndex + 1, fourItem[0])
+
+        for othersIndex, othersItem in enumerate(listOthersMorpho):
+            listboxOthersMorpho.insert(othersIndex + 1, othersItem[0])
+
+print('Starting to pre-processing...')
+
+# create a tkinter window
+window = tkinter.Tk()
+
+str_unbind = ""
+
+listOneMorpho = []
+listTwoMorpho = []
+listReversedTwoMorpho = []
+listThreeMorpho = []
+listFourMorpho = []
+listOthersMorpho = []
+
+# Connect to db
+conn = createConnection('./my_fts_data.db')
+
+# Init frame
+width, height = getHalfWindowSize(window)
+x, y = getCoordinate(window, width, height)
+
+# Open window having dimension 100x100
+window.geometry(f'{width}x{height}+{x}+{y}')
+
+# to rename the title of the window
+window.title("Từ điển tiếng Việt")
+
+container = Frame(window)
+canvas = Canvas(container)
+scrollbar = Scrollbar(container, orient="vertical", command=canvas.yview)
+scrollable_frame = Frame(canvas)
+
+scrollable_frame.bind(
+    "<Configure>",
+    lambda e: canvas.configure(
+        scrollregion=canvas.bbox("all")
+    )
+)
+
+canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", tags="my_tag")
+canvas.configure(yscrollcommand=scrollbar.set)
+
+canvas.bind(
+    "<Configure>", 
+    lambda e: canvas.itemconfig(
+        "my_tag", width=e.width
+    )
+)
+
+####################################################
+# pack is used to show the object in the window
+tkinter.Label(scrollable_frame, text = "Chào mừng đến với Từ điển Tiếng Việt").pack()
+
+# Set position for search bar
+frame_searchBar = Frame(scrollable_frame, relief=RAISED)
+frame_searchBar.pack(fill=X, padx=6, pady=4)
 
 def deleteText(event, entry):
     entry.delete(0, END)
     entry.unbind('<Button>', str_unbind)
 
-def createSearchBar(window):
-    button = Button(window, text="Tìm kiếm")
-    button.pack(side=RIGHT)
+userInput = StringVar(window)
 
-    entry = Entry(window)
-    entry.insert(0, "Nhập từ cần tìm...")
-    str_unbind = entry.bind("<Button>", lambda event: deleteText(event, entry))
-    entry.pack(fill=X)
+button = Button(frame_searchBar, text="Tìm kiếm", command=lambda : queryKeyword(conn, userInput.get()))
+button.pack(side=RIGHT)
 
-def createWordClass(window):
-    labelIndependent = Label(window, text="Độc lập")
-    labelIndependent.pack(fill=X)
+myFont = Font(family="Times New Roman", size=12)
+entry = Entry(frame_searchBar, textvariable=userInput)
+entry.insert(0, "Nhập từ cần tìm...")
+entry.configure(font=myFont)
+str_unbind = entry.bind("<Button>", lambda event: deleteText(event, entry))
+entry.pack(fill=X)
 
-    textIndependent = Text(window, height=10)
-    textIndependent.pack(fill=X)
+# set position for word class
+frame_wordClass = Frame(scrollable_frame)
+frame_wordClass.pack(fill=X, padx=6, pady=4)
 
-    labelDependent = Label(window, text="Không độc lập")
-    labelDependent.pack(fill=X)
+labelIndependent = Label(frame_wordClass, text="Độc lập")
+labelIndependent.pack(fill=X)
 
-    textDependent = Text(window, height=10)
-    textDependent.pack(fill=X)
+textIndependent = Text(frame_wordClass, height=10)
+textIndependent.pack(fill=X)
 
-def createWordType(window):
-    listboxOneMorpho = Listbox(window, height=20)
-    listboxOneMorpho.pack(side=LEFT)
+labelDependent = Label(frame_wordClass, text="Không độc lập")
+labelDependent.pack(fill=X)
 
-    listboxTwoMorpho = Listbox(window, height=20)
-    listboxTwoMorpho.pack(side=LEFT)
+textDependent = Text(frame_wordClass, height=10)
+textDependent.pack(fill=X)
 
-    listboxTwoReversedMorpho = Listbox(window, height=20)
-    listboxTwoReversedMorpho.pack(side=LEFT)
+# set position for word type
+frame_wordType = Frame(scrollable_frame)
+frame_wordType.pack(expand=True, padx=6, pady=4)
 
-def createWordTypeAddition(window):
-    listboxThreeMorpho = Listbox(window, height=20)
-    listboxThreeMorpho.pack(side=LEFT)
+listboxOneMorpho = Listbox(frame_wordType, height=20)
+listboxOneMorpho.pack(side=LEFT)
 
-    listboxFourMorpho = Listbox(window, height=20)
-    listboxFourMorpho.pack(side=LEFT)
+listboxTwoMorpho = Listbox(frame_wordType, height=20)
+listboxTwoMorpho.pack(side=LEFT)
 
-def createDefinition(window):
-    labelDefinition = Label(window, text="Định ngĩa")
-    labelDefinition.pack(fill=X)
+listboxTwoReversedMorpho = Listbox(frame_wordType, height=20)
+listboxTwoReversedMorpho.pack(side=LEFT)
 
-    textDefinition = Text(window, height=10)
-    textDefinition.pack(fill=X)
+# set position for word type
+frame_wordTypeAddition = Frame(scrollable_frame)
+frame_wordTypeAddition.pack(expand=True, padx=6, pady=4)
 
-def createImage(window):
-    labelSelectImage = Label(window, text="Chọn hình ảnh cần xem")
-    labelSelectImage.pack(fill=X)
+listboxThreeMorpho = Listbox(frame_wordTypeAddition, height=20)
+listboxThreeMorpho.pack(side=LEFT)
 
-    labelImage = Label(window, text="Image")
-    labelImage.pack(fill=X, side=LEFT)
+listboxFourMorpho = Listbox(frame_wordTypeAddition, height=20)
+listboxFourMorpho.pack(side=LEFT)
 
-    listboxImage = Listbox(window, height=10)
-    listboxImage.pack(side=LEFT)
+listboxOthersMorpho = Listbox(frame_wordTypeAddition, height=20)
+listboxOthersMorpho.pack(side=LEFT)
 
-def createNote(window):
-    labelNote = Label(window, text="Ghi chú")
-    labelNote.pack(fill=X)
+# set position for definition
+frame_definition = Frame(scrollable_frame)
+frame_definition.pack(fill=X, padx=6, pady=4)
 
-    textNote = Text(window, height=10)
-    textNote.pack(fill=X)
+labelDefinition = Label(frame_definition, text="Định ngĩa")
+labelDefinition.pack(fill=X)
 
-def createForeign(window):
-    labelForeign = Label(window, text="Ngôn ngữ khác")
-    labelForeign.pack(fill=X)
+textDefinition = Text(frame_definition, height=10)
+textDefinition.pack(fill=X)
 
-    listboxForeign = Listbox(window, height=8)
-    listboxForeign.pack(side=LEFT)
+# set position for image
+frame_image = Frame(scrollable_frame)
+frame_image.pack(expand=True, padx=6, pady=4)
 
-    textForeign = Text(window, height=10)
-    textForeign.pack(side=LEFT, padx=6)
+labelSelectImage = Label(frame_image, text="Chọn hình ảnh cần xem")
+labelSelectImage.pack(fill=X)
 
+labelImage = Label(frame_image, text="Image")
+labelImage.pack(fill=X, side=LEFT)
 
-def createObjects(window):
-    # pack is used to show the object in the window
-    tkinter.Label(window, text = "Chào mừng đến với Từ điển Tiếng Việt").pack()
+listboxImage = Listbox(frame_image, height=10)
+listboxImage.pack(side=LEFT)
 
-    # Set position for search bar
-    frame_searchBar = Frame(window, relief=RAISED)
-    frame_searchBar.pack(fill=X, padx=6, pady=4)
+# set position for notes
+frame_note = Frame(scrollable_frame)
+frame_note.pack(expand=True, padx=6, pady=4)
 
-    createSearchBar(frame_searchBar)
+labelNote = Label(frame_note, text="Ghi chú")
+labelNote.pack(fill=X)
 
-    # set position for word class
-    frame_wordClass = Frame(window)
-    frame_wordClass.pack(fill=X, padx=6, pady=4)
+textNote = Text(frame_note, height=10)
+textNote.pack(fill=X)
 
-    createWordClass(frame_wordClass)
+# set position for foreign
+frame_foreign = Frame(scrollable_frame)
+frame_foreign.pack(expand=True, padx=6, pady=6)
 
-    # set position for word type
-    frame_wordType = Frame(window)
-    frame_wordType.pack(expand=True, padx=6, pady=4)
+labelForeign = Label(frame_foreign, text="Ngôn ngữ khác")
+labelForeign.pack(fill=X)
 
-    createWordType(frame_wordType)
+listboxForeign = Listbox(frame_foreign, height=8)
+listboxForeign.pack(side=LEFT)
 
-    # set position for word type
-    frame_wordTypeAddition = Frame(window)
-    frame_wordTypeAddition.pack(expand=True, padx=6, pady=4)
+textForeign = Text(frame_foreign, height=10)
+textForeign.pack(side=LEFT, padx=6)
+####################################################
 
-    createWordTypeAddition(frame_wordTypeAddition)
+container.pack(fill=BOTH, expand=True)
+canvas.pack(side=LEFT, fill=BOTH, expand=True)
+scrollbar.pack(side=RIGHT, fill=BOTH)
 
-    # set position for definition
-    frame_definition = Frame(window)
-    frame_definition.pack(fill=X, padx=6, pady=4)
+# Start to run window
+window.mainloop()
 
-    createDefinition(frame_definition)
+conn.close()
+print('Terminate processsing...')
 
-    # set position for image
-    frame_image = Frame(window)
-    frame_image.pack(expand=True, padx=6, pady=4)
-
-    createImage(frame_image)
-
-    # set position for notes
-    frame_note = Frame(window)
-    frame_note.pack(expand=True, padx=6, pady=4)
-
-    createNote(frame_note)
-
-    # set position for foreign
-    frame_foreign = Frame(window)
-    frame_foreign.pack(expand=True, padx=6, pady=6)
-
-    createForeign(frame_foreign)
-
-def main():
-    # create a tkinter window
-    window = tkinter.Tk()
-
-    width, height = getHalfWindowSize(window)
-    x, y = getCoordinate(window, width, height)
-
-    # Open window having dimension 100x100
-    window.geometry(f'{width}x{height}+{x}+{y}')
-
-    # to rename the title of the window
-    window.title("Từ điển tiếng Việt")
-
-    # createMenu(window)
-
-    container = Frame(window)
-    canvas = Canvas(container)
-    scrollbar = Scrollbar(container, orient="vertical", command=canvas.yview)
-    scrollable_frame = Frame(canvas)
-
-    scrollable_frame.bind(
-        "<Configure>",
-        lambda e: canvas.configure(
-            scrollregion=canvas.bbox("all")
-        )
-    )
-
-    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", tags="my_tag")
-    canvas.configure(yscrollcommand=scrollbar.set)
-
-    canvas.bind(
-        "<Configure>", 
-        lambda e: canvas.itemconfig(
-            "my_tag", width=e.width
-        )
-    )
-
-    createObjects(scrollable_frame)
-
-    container.pack(fill=BOTH, expand=True)
-    canvas.pack(side=LEFT, fill=BOTH, expand=True)
-    scrollbar.pack(side=RIGHT, fill=BOTH)
-
-    # Start to run window
-    window.mainloop()
-
-if __name__ == '__main__':
-    print('Starting to pre-processing...')
-    main()
-    print('Terminate processsing...')
