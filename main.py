@@ -1,7 +1,5 @@
 import tkinter
-from tkinter import *
-
-import sqlite3 
+from tkinter import * 
 
 str_unbind = ""
 
@@ -11,26 +9,26 @@ def getHalfWindowSize(window):
 def getCoordinate(window, width, height):
     return int((window.winfo_screenwidth() / 2) - (width / 2)), int((window.winfo_screenheight() / 2) - (height / 2))
 
-def createMenu(window):
-    # Menu
-    menubar = Menu(window)
+# def createMenu(window):
+#     # Menu
+#     menubar = Menu(window)
 
-    file = Menu(menubar, tearoff=0)  
-    file.add_command(label="New")  
-    file.add_command(label="Open")  
-    file.add_command(label="Save")  
-    file.add_command(label="Save as...")  
-    file.add_command(label="Close") 
-    file.add_separator()  
-    file.add_command(label="Exit", command=window.quit)  
-    menubar.add_cascade(label="File", menu=file)
+#     file = Menu(menubar, tearoff=0)  
+#     file.add_command(label="New")  
+#     file.add_command(label="Open")  
+#     file.add_command(label="Save")  
+#     file.add_command(label="Save as...")  
+#     file.add_command(label="Close") 
+#     file.add_separator()  
+#     file.add_command(label="Exit", command=window.quit)  
+#     menubar.add_cascade(label="File", menu=file)
 
-    # Adding Help Menu
-    help_ = Menu(menubar, tearoff = 0)
-    help_.add_command(label='About Tk', command=None)
-    menubar.add_cascade(label='Help', menu=help_)
+#     # Adding Help Menu
+#     help_ = Menu(menubar, tearoff = 0)
+#     help_.add_command(label='About Tk', command=None)
+#     menubar.add_cascade(label='Help', menu=help_)
 
-    window.config(menu=menubar)
+#     window.config(menu=menubar)
 
 def deleteText(event, entry):
     entry.delete(0, END)
@@ -175,7 +173,7 @@ def main():
     # to rename the title of the window
     window.title("Từ điển tiếng Việt")
 
-    createMenu(window)
+    # createMenu(window)
 
     container = Frame(window)
     canvas = Canvas(container)
