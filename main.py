@@ -164,13 +164,13 @@ frame_wordClass.pack(fill=X, padx=6, pady=4)
 labelIndependent = Label(frame_wordClass, text="Độc lập")
 labelIndependent.pack(fill=X)
 
-textIndependent = Text(frame_wordClass, height=10)
+textIndependent = Text(frame_wordClass, height=6)
 textIndependent.pack(fill=X)
 
 labelDependent = Label(frame_wordClass, text="Không độc lập")
 labelDependent.pack(fill=X)
 
-textDependent = Text(frame_wordClass, height=10)
+textDependent = Text(frame_wordClass, height=6)
 textDependent.pack(fill=X)
 
 # set position for word type
