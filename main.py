@@ -300,6 +300,8 @@ labelImage.pack(fill=X, side=LEFT)
 listboxImage = Listbox(frame_image, height=10)
 listboxImage.pack(side=LEFT)
 
+# set position for video
+
 # set position for notes
 frame_note = Frame(scrollable_frame)
 frame_note.pack(expand=True, padx=6, pady=4)
