@@ -7,7 +7,7 @@ from sqlite3 import Error
 
 
 def getHalfWindowSize(window):
-    return int(window.winfo_screenwidth() / 2), int(window.winfo_screenheight() / 1)
+    return int(window.winfo_screenwidth() / 2) + 250, int(window.winfo_screenheight() / 1)
 
 def getCoordinate(window, width, height):
     return int((window.winfo_screenwidth() / 2) - (width / 2)), int((window.winfo_screenheight() / 2) - (height / 2))
@@ -28,12 +28,12 @@ def createConnection(db_file):
 
 def queryKeyword(conn, keyword):
     if len(keyword) > 0:
-        listOneMorpho = []
-        listTwoMorpho = []
-        listReversedTwoMorpho = []
-        listThreeMorpho = []
-        listFourMorpho = []
-        listOthersMorpho = []
+        del listOneMorpho[:]
+        del listTwoMorpho[:]
+        del listReversedTwoMorpho[:]
+        del listThreeMorpho[:]
+        del listFourMorpho[:]
+        del listOthersMorpho[:]
 
         listboxOneMorpho.delete(0, END)
         listboxTwoMorpho.delete(0, END)
@@ -83,6 +83,78 @@ def queryKeyword(conn, keyword):
 
         for othersIndex, othersItem in enumerate(listOthersMorpho):
             listboxOthersMorpho.insert(othersIndex + 1, othersItem[0])
+
+def callbackOneMorpho(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = listOneMorpho[index]
+
+        txt_def = data[1] + '\n' + data[2]
+
+        textDefinition.delete('1.0', END)
+
+        textDefinition.insert('1.0', txt_def)
+
+def callbackTwoMorpho(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = listTwoMorpho[index]
+
+        txt_def = data[1] + '\n' + data[2]
+
+        textDefinition.delete('1.0', END)
+
+        textDefinition.insert('1.0', txt_def)
+
+def callbackTwoReversedMorpho(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = listReversedTwoMorpho[index]
+
+        txt_def = data[1] + '\n' + data[2]
+
+        textDefinition.delete('1.0', END)
+
+        textDefinition.insert('1.0', txt_def)
+
+def callbackThreeMorpho(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = listThreeMorpho[index]
+
+        txt_def = data[1] + '\n' + data[2]
+
+        textDefinition.delete('1.0', END)
+
+        textDefinition.insert('1.0', txt_def)
+
+def callbackFourMorpho(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = listFourMorpho[index]
+
+        txt_def = data[1] + '\n' + data[2]
+
+        textDefinition.delete('1.0', END)
+
+        textDefinition.insert('1.0', txt_def)
+
+def callbackOthersMorpho(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = listOthersMorpho[index]
+
+        txt_def = data[1] + '\n' + data[2]
+
+        textDefinition.delete('1.0', END)
+
+        textDefinition.insert('1.0', txt_def)
 
 print('Starting to pre-processing...')
 
@@ -177,27 +249,33 @@ textDependent.pack(fill=X)
 frame_wordType = Frame(scrollable_frame)
 frame_wordType.pack(expand=True, padx=6, pady=4)
 
-listboxOneMorpho = Listbox(frame_wordType, height=20)
+listboxOneMorpho = Listbox(frame_wordType, width=25, height=20)
 listboxOneMorpho.pack(side=LEFT)
+listboxOneMorpho.bind("<<ListboxSelect>>", callbackOneMorpho)
 
-listboxTwoMorpho = Listbox(frame_wordType, height=20)
+listboxTwoMorpho = Listbox(frame_wordType, width=25, height=20)
 listboxTwoMorpho.pack(side=LEFT)
+listboxTwoMorpho.bind("<<ListboxSelect>>", callbackTwoMorpho)
 
-listboxTwoReversedMorpho = Listbox(frame_wordType, height=20)
+listboxTwoReversedMorpho = Listbox(frame_wordType, width=25, height=20)
 listboxTwoReversedMorpho.pack(side=LEFT)
+listboxTwoReversedMorpho.bind("<<ListboxSelect>>", callbackTwoReversedMorpho)
 
 # set position for word type
 frame_wordTypeAddition = Frame(scrollable_frame)
 frame_wordTypeAddition.pack(expand=True, padx=6, pady=4)
 
-listboxThreeMorpho = Listbox(frame_wordTypeAddition, height=20)
+listboxThreeMorpho = Listbox(frame_wordTypeAddition, width=25, height=20)
 listboxThreeMorpho.pack(side=LEFT)
+listboxThreeMorpho.bind("<<ListboxSelect>>", callbackThreeMorpho)
 
-listboxFourMorpho = Listbox(frame_wordTypeAddition, height=20)
+listboxFourMorpho = Listbox(frame_wordTypeAddition, width=25, height=20)
 listboxFourMorpho.pack(side=LEFT)
+listboxFourMorpho.bind("<<ListboxSelect>>", callbackFourMorpho)
 
-listboxOthersMorpho = Listbox(frame_wordTypeAddition, height=20)
+listboxOthersMorpho = Listbox(frame_wordTypeAddition, width=25, height=20)
 listboxOthersMorpho.pack(side=LEFT)
+listboxOthersMorpho.bind("<<ListboxSelect>>", callbackOthersMorpho)
 
 # set position for definition
 frame_definition = Frame(scrollable_frame)
