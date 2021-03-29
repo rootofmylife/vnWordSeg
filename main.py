@@ -197,6 +197,80 @@ def updateVideoKeyword(conn, keyword):
                     message='./videos/' + os.path.basename(filename)
                 )
 
+def deleteImageKeyword(conn, keyword):
+    if keyword is not None and len(keyword.get()) > 0:
+        filename = listboxImage.get(listboxImage.curselection())
+
+        # Remove on UI
+        idx = listboxImage.get(0, END).index(filename)
+        listboxImage.delete(idx)
+
+        # Remove in hard disk
+        if os.path.exists('./images/' + filename):
+            os.remove('./images/' + filename)
+
+        # Remove on database
+        keyword = literal_eval(keyword.get())
+
+        strImagePaths = StringVar()
+
+        if keyword[3] == 'None':
+            strImagePaths.set('[]')
+        else:
+            strImagePaths.set(keyword[3])
+
+        lstImagePaths = json.loads(strImagePaths.get())
+        lstImagePaths.remove(filename)
+
+        strImagePathsToSave = json.dumps(lstImagePaths)
+
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        messagebox.showinfo(
+            title='Đã xoá thành công',
+            message='./images/' + filename
+        )
+
+def deleteVideoKeyword(conn, keyword):
+    if keyword is not None and len(keyword.get()) > 0:
+        filename = listboxVideo.get(listboxVideo.curselection())
+        
+        # Remove on UI
+        idx = listboxVideo.get(0, END).index(filename)
+        listboxVideo.delete(idx)
+
+        # Remove in hard disk
+        if os.path.exists('./videos/' + filename):
+            os.remove('./videos/' + filename)
+
+        # Remove on database
+        keyword = literal_eval(keyword.get())
+
+        strVideoPaths = StringVar()
+
+        if keyword[3] == 'None':
+            strVideoPaths.set('[]')
+        else:
+            strVideoPaths.set(keyword[3])
+
+        lstVideoPaths = json.loads(strVideoPaths.get())
+        lstVideoPaths.remove(filename)
+
+        strVideoPathsToSave = json.dumps(lstVideoPaths)
+
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET images='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        messagebox.showinfo(
+            title='Đã xoá thành công',
+            message='./videos' + filename
+        )
+
 def updateNoteKeyword(conn, keyword, newText):
     if keyword is not None and len(keyword.get()) > 0:
         keyword = literal_eval(keyword.get())
@@ -453,7 +527,7 @@ def callbackImage(event):
     selection = event.widget.curselection()
     if selection:
         value = event.widget.get(selection[0])
-        os.startfile(os.path.normpath(os.path.join('./images/' + value)))
+        # os.startfile(os.path.normpath(os.path.join('./images/' + value)))
 
 def callbackVideo(event):
     selection = event.widget.curselection()
@@ -653,6 +727,9 @@ listboxImage.bind("<<ListboxSelect>>", callbackImage)
 buttonImage = Button(frame_image, text="Cập nhật hình ảnh", command=lambda : updateImageKeyword(conn, currentSelectedKeyword))
 buttonImage.pack(fill=X)
 
+buttonDeleteImage = Button(frame_image, text="Xoá hình ảnh đang chọn", command=lambda : deleteImageKeyword(conn, currentSelectedKeyword))
+buttonDeleteImage.pack(fill=X, pady=8)
+
 # set position for video
 frame_video = Frame(frame_ImageVideo)
 frame_video.pack(side=LEFT, padx=10, pady=4)
@@ -666,6 +743,9 @@ listboxVideo.bind("<<ListboxSelect>>", callbackVideo)
 
 buttonVideo = Button(frame_video, text="Cập nhật video", command=lambda : updateVideoKeyword(conn, currentSelectedKeyword))
 buttonVideo.pack(fill=X)
+
+buttonDeleteVideo = Button(frame_video, text="Xoá video đang chọn", command=lambda : deleteVideoKeyword(conn, currentSelectedKeyword))
+buttonDeleteVideo.pack(fill=X, pady=8)
 
 # set position for notes
 frame_note = Frame(scrollable_frame)
