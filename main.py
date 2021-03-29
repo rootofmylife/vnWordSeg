@@ -201,75 +201,75 @@ def deleteImageKeyword(conn, keyword):
     if keyword is not None and len(keyword.get()) > 0:
         filename = listboxImage.get(listboxImage.curselection())
 
-        # Remove on UI
-        idx = listboxImage.get(0, END).index(filename)
-        listboxImage.delete(idx)
-
         # Remove in hard disk
         if os.path.exists('./images/' + filename):
             os.remove('./images/' + filename)
 
-        # Remove on database
-        keyword = literal_eval(keyword.get())
+            # Remove on UI
+            idx = listboxImage.get(0, END).index(filename)
+            listboxImage.delete(idx)
 
-        strImagePaths = StringVar()
+            # Remove on database
+            keyword = literal_eval(keyword.get())
 
-        if keyword[3] == 'None':
-            strImagePaths.set('[]')
-        else:
-            strImagePaths.set(keyword[3])
+            strImagePaths = StringVar()
 
-        lstImagePaths = json.loads(strImagePaths.get())
-        lstImagePaths.remove(filename)
+            if keyword[3] == 'None':
+                strImagePaths.set('[]')
+            else:
+                strImagePaths.set(keyword[3])
 
-        strImagePathsToSave = json.dumps(lstImagePaths)
+            lstImagePaths = json.loads(strImagePaths.get())
+            lstImagePaths.remove(filename)
 
-        cur = conn.cursor()
-        cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
-        conn.commit()
-        cur.close()
+            strImagePathsToSave = json.dumps(lstImagePaths)
 
-        messagebox.showinfo(
-            title='Đã xoá thành công',
-            message='./images/' + filename
-        )
+            cur = conn.cursor()
+            cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+            conn.commit()
+            cur.close()
+
+            messagebox.showinfo(
+                title='Đã xoá thành công',
+                message='./images/' + filename
+            )
 
 def deleteVideoKeyword(conn, keyword):
     if keyword is not None and len(keyword.get()) > 0:
         filename = listboxVideo.get(listboxVideo.curselection())
-        
-        # Remove on UI
-        idx = listboxVideo.get(0, END).index(filename)
-        listboxVideo.delete(idx)
 
         # Remove in hard disk
         if os.path.exists('./videos/' + filename):
             os.remove('./videos/' + filename)
 
-        # Remove on database
-        keyword = literal_eval(keyword.get())
+            # Remove on UI
+            idx = listboxVideo.get(0, END).index(filename)
+            listboxVideo.delete(idx)
 
-        strVideoPaths = StringVar()
+            # Remove on database
+            keyword = literal_eval(keyword.get())
 
-        if keyword[3] == 'None':
-            strVideoPaths.set('[]')
-        else:
-            strVideoPaths.set(keyword[3])
+            strVideoPaths = StringVar()
 
-        lstVideoPaths = json.loads(strVideoPaths.get())
-        lstVideoPaths.remove(filename)
+            if keyword[3] == 'None':
+                strVideoPaths.set('[]')
+            else:
+                strVideoPaths.set(keyword[3])
 
-        strVideoPathsToSave = json.dumps(lstVideoPaths)
+            lstVideoPaths = json.loads(strVideoPaths.get())
+            lstVideoPaths.remove(filename)
 
-        cur = conn.cursor()
-        cur.execute(f"""UPDATE dict SET images='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
-        conn.commit()
-        cur.close()
+            strVideoPathsToSave = json.dumps(lstVideoPaths)
 
-        messagebox.showinfo(
-            title='Đã xoá thành công',
-            message='./videos' + filename
-        )
+            cur = conn.cursor()
+            cur.execute(f"""UPDATE dict SET images='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+            conn.commit()
+            cur.close()
+
+            messagebox.showinfo(
+                title='Đã xoá thành công',
+                message='./videos' + filename
+            )
 
 def updateNoteKeyword(conn, keyword, newText):
     if keyword is not None and len(keyword.get()) > 0:
