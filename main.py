@@ -1,9 +1,12 @@
 import tkinter
-from tkinter import * 
+from tkinter import *
+from tkinter import messagebox
 from tkinter.font import Font
 
 import sqlite3
 from sqlite3 import Error
+
+import os
 
 
 def getHalfWindowSize(window):
@@ -66,6 +69,7 @@ def queryKeyword(conn, keyword):
                 else:
                     listOthersMorpho.append(item)
 
+        # Add data to morpho list
         for oneIndex, oneItem in enumerate(listOneMorpho):
             listboxOneMorpho.insert(oneIndex + 1, oneItem[0])
 
@@ -84,6 +88,18 @@ def queryKeyword(conn, keyword):
         for othersIndex, othersItem in enumerate(listOthersMorpho):
             listboxOthersMorpho.insert(othersIndex + 1, othersItem[0])
 
+def updateIndep(indepText):
+    with open('./resources/doclap.txt', 'w') as fdl:
+        fdl.write(indepText)
+
+    messagebox.showinfo("Trạng thái", "Đã lưu thành công")
+
+def updateDep(depText):
+    with open('./resources/khongdoclap.txt', 'w') as fkdl:
+        fkdl.write(depText)
+
+    messagebox.showinfo("Trạng thái", "Đã lưu thành công")
+
 def updateImageKeyword(conn, keyword):
     pass
 
@@ -101,72 +117,234 @@ def callbackOneMorpho(event):
     if selection:
         index = selection[0]
         data = listOneMorpho[index]
+        currentSelectedKeyword = data
 
         txt_def = data[1] + '\n' + data[2]
 
         textDefinition.delete('1.0', END)
 
         textDefinition.insert('1.0', txt_def)
+
+        # image
+        if data[3] is not None:
+            img_list = data[3].split(';')
+            
+            for imgIndex, imgItem in enumerate(img_list):
+                listboxImage.insert(imgIndex + 1, imgItem)
+
+        # video
+        if data[4] is not None:
+            vid_list = data[3].split(';')
+
+            for vidIndex, vidItem in enumerate(vid_list):
+                listboxVideo.insert(vidIndex + 1, vidItem)
+
+        # note
+        if data[5] is not None:
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[5])
+
+        # foreign
+        if data[6] is not None:
+            forg_list = data[6].split(';')
+
+            for forgIndex, forgItem in enumerate(forg_list):
+                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
 
 def callbackTwoMorpho(event):
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = listTwoMorpho[index]
+        currentSelectedKeyword = data
 
         txt_def = data[1] + '\n' + data[2]
 
         textDefinition.delete('1.0', END)
 
         textDefinition.insert('1.0', txt_def)
+
+        # image
+        if data[3] is not None:
+            img_list = data[3].split(';')
+            
+            for imgIndex, imgItem in enumerate(img_list):
+                listboxImage.insert(imgIndex + 1, imgItem)
+
+        # video
+        if data[4] is not None:
+            vid_list = data[3].split(';')
+
+            for vidIndex, vidItem in enumerate(vid_list):
+                listboxVideo.insert(vidIndex + 1, vidItem)
+
+        # note
+        if data[5] is not None:
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[5])
+
+        # foreign
+        if data[6] is not None:
+            forg_list = data[6].split(';')
+
+            for forgIndex, forgItem in enumerate(forg_list):
+                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
 
 def callbackTwoReversedMorpho(event):
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = listReversedTwoMorpho[index]
+        currentSelectedKeyword = data
 
         txt_def = data[1] + '\n' + data[2]
 
         textDefinition.delete('1.0', END)
 
         textDefinition.insert('1.0', txt_def)
+
+        # image
+        if data[3] is not None:
+            img_list = data[3].split(';')
+            
+            for imgIndex, imgItem in enumerate(img_list):
+                listboxImage.insert(imgIndex + 1, imgItem)
+
+        # video
+        if data[4] is not None:
+            vid_list = data[3].split(';')
+
+            for vidIndex, vidItem in enumerate(vid_list):
+                listboxVideo.insert(vidIndex + 1, vidItem)
+
+        # note
+        if data[5] is not None:
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[5])
+
+        # foreign
+        if data[6] is not None:
+            forg_list = data[6].split(';')
+
+            for forgIndex, forgItem in enumerate(forg_list):
+                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
 
 def callbackThreeMorpho(event):
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = listThreeMorpho[index]
+        currentSelectedKeyword = data
 
         txt_def = data[1] + '\n' + data[2]
 
         textDefinition.delete('1.0', END)
 
         textDefinition.insert('1.0', txt_def)
+
+        # image
+        if data[3] is not None:
+            img_list = data[3].split(';')
+            
+            for imgIndex, imgItem in enumerate(img_list):
+                listboxImage.insert(imgIndex + 1, imgItem)
+
+        # video
+        if data[4] is not None:
+            vid_list = data[3].split(';')
+
+            for vidIndex, vidItem in enumerate(vid_list):
+                listboxVideo.insert(vidIndex + 1, vidItem)
+
+        # note
+        if data[5] is not None:
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[5])
+
+        # foreign
+        if data[6] is not None:
+            forg_list = data[6].split(';')
+
+            for forgIndex, forgItem in enumerate(forg_list):
+                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
 
 def callbackFourMorpho(event):
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = listFourMorpho[index]
+        currentSelectedKeyword = data
 
         txt_def = data[1] + '\n' + data[2]
 
         textDefinition.delete('1.0', END)
 
         textDefinition.insert('1.0', txt_def)
+
+        # image
+        if data[3] is not None:
+            img_list = data[3].split(';')
+            
+            for imgIndex, imgItem in enumerate(img_list):
+                listboxImage.insert(imgIndex + 1, imgItem)
+
+        # video
+        if data[4] is not None:
+            vid_list = data[3].split(';')
+
+            for vidIndex, vidItem in enumerate(vid_list):
+                listboxVideo.insert(vidIndex + 1, vidItem)
+
+        # note
+        if data[5] is not None:
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[5])
+
+        # foreign
+        if data[6] is not None:
+            forg_list = data[6].split(';')
+
+            for forgIndex, forgItem in enumerate(forg_list):
+                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
 
 def callbackOthersMorpho(event):
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = listOthersMorpho[index]
+        currentSelectedKeyword = data
 
         txt_def = data[1] + '\n' + data[2]
 
         textDefinition.delete('1.0', END)
 
         textDefinition.insert('1.0', txt_def)
+
+        # image
+        if data[3] is not None:
+            img_list = data[3].split(';')
+            
+            for imgIndex, imgItem in enumerate(img_list):
+                listboxImage.insert(imgIndex + 1, imgItem)
+
+        # video
+        if data[4] is not None:
+            vid_list = data[3].split(';')
+
+            for vidIndex, vidItem in enumerate(vid_list):
+                listboxVideo.insert(vidIndex + 1, vidItem)
+
+        # note
+        if data[5] is not None:
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[5])
+
+        # foreign
+        if data[6] is not None:
+            forg_list = data[6].split(';')
+
+            for forgIndex, forgItem in enumerate(forg_list):
+                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
 
 print('Starting to pre-processing...')
 
@@ -174,6 +352,11 @@ print('Starting to pre-processing...')
 window = tkinter.Tk()
 
 str_unbind = ""
+
+currentSelectedKeyword = None
+
+dependentContent = ""
+independentContent = ""
 
 listOneMorpho = []
 listTwoMorpho = []
@@ -221,6 +404,29 @@ canvas.bind(
 # pack is used to show the object in the window
 tkinter.Label(scrollable_frame, text = "Chào mừng đến với Từ điển Tiếng Việt").pack()
 
+if os.path.isdir('./videos') is False:
+    os.makedirs('./videos')
+
+if os.path.isdir('./images') is False:
+    os.makedirs('./images')
+
+if os.path.isdir('./resources') is False:
+    os.makedirs('./resources')
+else:
+    if os.path.exists('./resources/doclap.txt') is False:
+        with open('./resources/doclap.txt', 'a') as fdl:
+            pass
+
+    with open('./resources/doclap.txt') as fdl:
+            dependentContent = fdl.read()
+        
+    if os.path.exists('./resources/khongdoclap.txt') is False:
+        with open('./resources/khongdoclap.txt', 'a') as fkdl:
+            pass
+
+    with open('./resources/khongdoclap.txt') as fkdl:
+            independentContent = fkdl.read()
+
 # Set position for search bar
 frame_searchBar = Frame(scrollable_frame, relief=RAISED)
 frame_searchBar.pack(fill=X, padx=6, pady=4)
@@ -252,8 +458,9 @@ labelIndependent.pack(fill=X)
 textIndependent = Text(frame_wordClass, height=10)
 textIndependent.pack(fill=X)
 textIndependent.configure(font=myFont)
+textIndependent.insert("1.0", independentContent)
 
-buttonIndependent = Button(frame_wordClass, text="Cập nhật thông tin độc lập")
+buttonIndependent = Button(frame_wordClass, text="Cập nhật thông tin độc lập", command=lambda : updateIndep(textIndependent.get("1.0", 'end-1c')))
 buttonIndependent.pack(fill=X)
 
 labelDependent = Label(frame_wordClass, text="Không độc lập")
@@ -262,8 +469,9 @@ labelDependent.pack(fill=X)
 textDependent = Text(frame_wordClass, height=10)
 textDependent.pack(fill=X)
 textDependent.configure(font=myFont)
+textDependent.insert("1.0", dependentContent)
 
-buttonDependent = Button(frame_wordClass, text="Cập nhật thông tin không độc lập")
+buttonDependent = Button(frame_wordClass, text="Cập nhật thông tin không độc lập", command=lambda : updateDep(textDependent.get("1.0", 'end-1c')))
 buttonDependent.pack(fill=X)
 
 # set position for word type
@@ -319,7 +527,7 @@ frame_image.pack(expand=True, padx=6, pady=4)
 labelSelectImage = Label(frame_image, text="Chọn hình ảnh cần xem")
 labelSelectImage.pack(fill=X)
 
-listboxImage = Listbox(frame_image, height=10)
+listboxImage = Listbox(frame_image, height=15)
 listboxImage.pack(fill=X)
 
 buttonImage = Button(frame_image, text="Cập nhật hình ảnh")
@@ -332,7 +540,7 @@ frame_video.pack(expand=True, padx=6, pady=4)
 labelSelectVideo = Label(frame_video, text="Chọn video cần xem")
 labelSelectVideo.pack(fill=X)
 
-listboxVideo = Listbox(frame_video, height=10)
+listboxVideo = Listbox(frame_video, height=15)
 listboxVideo.pack(fill=X)
 
 buttonVideo = Button(frame_video, text="Cập nhật video")
