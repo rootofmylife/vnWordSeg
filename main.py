@@ -168,7 +168,7 @@ def callbackTwoMorpho(event):
     if selection:
         index = selection[0]
         data = listTwoMorpho[index]
-        currentSelectedKeyword = data
+        currentSelectedKeyword.set(data)
 
         txt_def = data[1] + '\n' + data[2]
 
@@ -207,7 +207,7 @@ def callbackTwoReversedMorpho(event):
     if selection:
         index = selection[0]
         data = listReversedTwoMorpho[index]
-        currentSelectedKeyword = data
+        currentSelectedKeyword.set(data)
 
         txt_def = data[1] + '\n' + data[2]
 
@@ -246,7 +246,7 @@ def callbackThreeMorpho(event):
     if selection:
         index = selection[0]
         data = listThreeMorpho[index]
-        currentSelectedKeyword = data
+        currentSelectedKeyword.set(data)
 
         txt_def = data[1] + '\n' + data[2]
 
@@ -285,7 +285,7 @@ def callbackFourMorpho(event):
     if selection:
         index = selection[0]
         data = listFourMorpho[index]
-        currentSelectedKeyword = data
+        currentSelectedKeyword.set(data)
 
         txt_def = data[1] + '\n' + data[2]
 
@@ -324,7 +324,7 @@ def callbackOthersMorpho(event):
     if selection:
         index = selection[0]
         data = listOthersMorpho[index]
-        currentSelectedKeyword = data
+        currentSelectedKeyword.set(data)
 
         txt_def = data[1] + '\n' + data[2]
 
