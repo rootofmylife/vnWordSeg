@@ -7,7 +7,7 @@ import sqlite3
 from sqlite3 import Error
 
 import os
-
+from ast import literal_eval
 
 def getHalfWindowSize(window):
     return int(window.winfo_screenwidth() / 2) + 250, int(window.winfo_screenheight() / 1)
@@ -106,8 +106,18 @@ def updateImageKeyword(conn, keyword):
 def updateVideoKeyword(conn, keyword):
     pass
 
-def updateNoteKeyword(conn, keyword):
-    pass
+def updateNoteKeyword(conn, keyword, newText):
+    if keyword is not None:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET notes='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu thành công")
 
 def updateForeignKeyword(conn, keyword):
     pass
@@ -117,7 +127,7 @@ def callbackOneMorpho(event):
     if selection:
         index = selection[0]
         data = listOneMorpho[index]
-        currentSelectedKeyword = data
+        currentSelectedKeyword.set(data)
 
         txt_def = data[1] + '\n' + data[2]
 
@@ -150,6 +160,8 @@ def callbackOneMorpho(event):
 
             for forgIndex, forgItem in enumerate(forg_list):
                 listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+
+        return data
 
 def callbackTwoMorpho(event):
     selection = event.widget.curselection()
@@ -353,7 +365,7 @@ window = tkinter.Tk()
 
 str_unbind = ""
 
-currentSelectedKeyword = None
+currentSelectedKeyword = StringVar()
 
 dependentContent = ""
 independentContent = ""
@@ -556,7 +568,7 @@ labelNote.pack(fill=X)
 textNote = Text(frame_note, height=10)
 textNote.pack(fill=X)
 
-buttonNote = Button(frame_note, text="Cập nhật ghi chú")
+buttonNote = Button(frame_note, text="Cập nhật ghi chú", command=lambda : updateNoteKeyword(conn, currentSelectedKeyword, textNote.get('1.0', 'end-1c')))
 buttonNote.pack(fill=X)
 
 # set position for foreign
