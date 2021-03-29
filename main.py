@@ -107,7 +107,7 @@ def updateVideoKeyword(conn, keyword):
     pass
 
 def updateNoteKeyword(conn, keyword, newText):
-    if keyword is not None:
+    if keyword is not None and len(newText) > 0:
         keyword = literal_eval(keyword.get())
         cur = conn.cursor()
         cur.execute(f"""UPDATE dict SET notes='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
