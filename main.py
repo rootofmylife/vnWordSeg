@@ -527,7 +527,7 @@ def callbackImage(event):
     selection = event.widget.curselection()
     if selection:
         value = event.widget.get(selection[0])
-        # os.startfile(os.path.normpath(os.path.join('./images/' + value)))
+        os.startfile(os.path.normpath(os.path.join('./images/' + value)))
 
 def callbackVideo(event):
     selection = event.widget.curselection()
