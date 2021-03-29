@@ -635,9 +635,13 @@ textDefinition.configure(font=myFont)
 # buttonDefinition = Button(frame_definition, text="Cập nhật thông tin định nghĩa")
 # buttonDefinition.pack(fill=X)
 
+# frame for image & video
+frame_ImageVideo = Frame(scrollable_frame)
+frame_ImageVideo.pack(expand=True, padx=6, pady=4)
+
 # set position for image
-frame_image = Frame(scrollable_frame)
-frame_image.pack(expand=True, padx=6, pady=4)
+frame_image = Frame(frame_ImageVideo)
+frame_image.pack(side=LEFT, padx=10, pady=4)
 
 labelSelectImage = Label(frame_image, text="Chọn hình ảnh cần xem")
 labelSelectImage.pack(fill=X)
@@ -650,8 +654,8 @@ buttonImage = Button(frame_image, text="Cập nhật hình ảnh", command=lambd
 buttonImage.pack(fill=X)
 
 # set position for video
-frame_video = Frame(scrollable_frame)
-frame_video.pack(expand=True, padx=6, pady=4)
+frame_video = Frame(frame_ImageVideo)
+frame_video.pack(side=LEFT, padx=10, pady=4)
 
 labelSelectVideo = Label(frame_video, text="Chọn video cần xem")
 labelSelectVideo.pack(fill=X)
