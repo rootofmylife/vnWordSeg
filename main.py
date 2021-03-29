@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import *
 from tkinter import messagebox
+from tkinter.filedialog import askopenfilename
 from tkinter.font import Font
 
 import sqlite3
@@ -100,6 +101,43 @@ def updateDep(depText):
 
     messagebox.showinfo("Trạng thái", "Đã lưu thành công")
 
+def getImagePath():
+    print("here")
+    filetypes = (
+        ('Image files', ('.png', '.jpg', '.jpeg')),
+    )
+
+    filename = askopenfilename(
+        title='Open a file',
+        initialdir='/',
+        filetypes=filetypes
+    )
+
+    os.startfile(filename)
+    # if not filename or len(filename) < 1:
+    #     messagebox.showinfo(
+    #         title='Selected File',
+    #         message=filename
+    #     )
+
+def getVideoPath():
+    print("here")
+    filetypes = (
+        ('Video files', ('.mp4', '.avi', '.mov', '.mpg', '.m4v', '.flv', '.mkv', '.webm')),
+    )
+
+    filename = askopenfilename(
+        title='Open a video',
+        initialdir='/',
+        filetypes=filetypes
+    )
+
+    if not filename or len(filename) < 1:
+        messagebox.showinfo(
+            title='Selected Video',
+            message=filename
+        )
+
 def updateImageKeyword(conn, keyword):
     pass
 
@@ -107,7 +145,7 @@ def updateVideoKeyword(conn, keyword):
     pass
 
 def updateNoteKeyword(conn, keyword, newText):
-    if keyword is not None and len(newText) > 0:
+    if keyword is not None:
         keyword = literal_eval(keyword.get())
         cur = conn.cursor()
         cur.execute(f"""UPDATE dict SET notes='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
@@ -542,7 +580,7 @@ labelSelectImage.pack(fill=X)
 listboxImage = Listbox(frame_image, height=15)
 listboxImage.pack(fill=X)
 
-buttonImage = Button(frame_image, text="Cập nhật hình ảnh")
+buttonImage = Button(frame_image, text="Cập nhật hình ảnh", command=lambda : getImagePath())
 buttonImage.pack(fill=X)
 
 # set position for video
@@ -555,7 +593,7 @@ labelSelectVideo.pack(fill=X)
 listboxVideo = Listbox(frame_video, height=15)
 listboxVideo.pack(fill=X)
 
-buttonVideo = Button(frame_video, text="Cập nhật video")
+buttonVideo = Button(frame_video, text="Cập nhật video", command=lambda : getVideoPath())
 buttonVideo.pack(fill=X)
 
 # set position for notes
