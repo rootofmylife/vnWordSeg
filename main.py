@@ -84,6 +84,18 @@ def queryKeyword(conn, keyword):
         for othersIndex, othersItem in enumerate(listOthersMorpho):
             listboxOthersMorpho.insert(othersIndex + 1, othersItem[0])
 
+def updateImageKeyword(conn, keyword):
+    pass
+
+def updateVideoKeyword(conn, keyword):
+    pass
+
+def updateNoteKeyword(conn, keyword):
+    pass
+
+def updateForeignKeyword(conn, keyword):
+    pass
+
 def callbackOneMorpho(event):
     selection = event.widget.curselection()
     if selection:
@@ -171,7 +183,7 @@ listFourMorpho = []
 listOthersMorpho = []
 
 # Connect to db
-conn = createConnection('./my_fts_data.db')
+conn = createConnection('./my_fts_data_update.db')
 
 # Init frame
 width, height = getHalfWindowSize(window)
@@ -222,7 +234,8 @@ userInput = StringVar(window)
 button = Button(frame_searchBar, text="Tìm kiếm", command=lambda : queryKeyword(conn, userInput.get()))
 button.pack(side=RIGHT)
 
-myFont = Font(family="Times New Roman", size=12)
+myFont = Font(family="Times New Roman", size=14)
+
 entry = Entry(frame_searchBar, textvariable=userInput)
 entry.insert(0, "Nhập từ cần tìm...")
 entry.configure(font=myFont)
@@ -231,13 +244,14 @@ entry.pack(fill=X)
 
 # set position for word class
 frame_wordClass = Frame(scrollable_frame)
-frame_wordClass.pack(fill=X, padx=6, pady=4)
+frame_wordClass.pack(expand=True, padx=6, pady=4)
 
 labelIndependent = Label(frame_wordClass, text="Độc lập")
 labelIndependent.pack(fill=X)
 
-textIndependent = Text(frame_wordClass, height=6)
+textIndependent = Text(frame_wordClass, height=10)
 textIndependent.pack(fill=X)
+textIndependent.configure(font=myFont)
 
 buttonIndependent = Button(frame_wordClass, text="Cập nhật thông tin độc lập")
 buttonIndependent.pack(fill=X)
@@ -245,8 +259,9 @@ buttonIndependent.pack(fill=X)
 labelDependent = Label(frame_wordClass, text="Không độc lập")
 labelDependent.pack(fill=X)
 
-textDependent = Text(frame_wordClass, height=6)
+textDependent = Text(frame_wordClass, height=10)
 textDependent.pack(fill=X)
+textDependent.configure(font=myFont)
 
 buttonDependent = Button(frame_wordClass, text="Cập nhật thông tin không độc lập")
 buttonDependent.pack(fill=X)
@@ -292,9 +307,10 @@ labelDefinition.pack(fill=X)
 
 textDefinition = Text(frame_definition, height=10)
 textDefinition.pack(fill=X)
+textDefinition.configure(font=myFont)
 
-buttonDefinition = Button(frame_definition, text="Cập nhật thông tin định nghĩa")
-buttonDefinition.pack(fill=X)
+# buttonDefinition = Button(frame_definition, text="Cập nhật thông tin định nghĩa")
+# buttonDefinition.pack(fill=X)
 
 # set position for image
 frame_image = Frame(scrollable_frame)
@@ -347,6 +363,7 @@ listboxForeign.pack(side=LEFT)
 
 textForeign = Text(frame_foreign, height=10)
 textForeign.pack(side=LEFT, padx=6)
+textForeign.configure(font=myFont)
 
 buttonForeign = Button(frame_foreign, text="Cập nhật ngôn ngữ")
 buttonForeign.pack(fill=X)
