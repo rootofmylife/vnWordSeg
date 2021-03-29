@@ -116,33 +116,39 @@ def updateImageKeyword(conn, keyword):
         )
 
         if filename or len(filename) > 0:
-            keyword = literal_eval(keyword.get())
+            if os.path.exists('./images/' + os.path.basename(filename)) is False:
+                keyword = literal_eval(keyword.get())
 
-            strImagePaths = StringVar()
+                strImagePaths = StringVar()
 
-            if keyword[3] == 'None':
-                strImagePaths.set('[]')
+                if keyword[3] == 'None':
+                    strImagePaths.set('[]')
+                else:
+                    strImagePaths.set(keyword[3])
+
+                lstImagePaths = json.loads(strImagePaths.get())
+                lstImagePaths.append(os.path.basename(filename))
+
+                strImagePathsToSave = json.dumps(lstImagePaths)
+
+                cur = conn.cursor()
+                cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+                conn.commit()
+                cur.close()
+
+                listboxImage.insert(len(lstImagePaths), os.path.basename(filename))
+
+                shutil.copy2(filename, './images')
+
+                messagebox.showinfo(
+                    title='Đã lưu thành công',
+                    message=filename
+                )
             else:
-                strImagePaths.set(keyword[3])
-
-            lstImagePaths = json.loads(strImagePaths.get())
-            lstImagePaths.append(os.path.basename(filename))
-
-            strImagePathsToSave = json.dumps(lstImagePaths)
-
-            cur = conn.cursor()
-            cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
-            conn.commit()
-            cur.close()
-
-            listboxImage.insert(len(lstImagePaths), os.path.basename(filename))
-
-            shutil.copy2(filename, './images')
-
-            messagebox.showinfo(
-                title='Đã lưu thành công',
-                message=filename
-            )
+                messagebox.showinfo(
+                    title='Tập tin đã tồn tại',
+                    message='./images/' + os.path.basename(filename)
+                )
 
 def updateVideoKeyword(conn, keyword):
     if keyword is not None and len(keyword.get()) > 0: 
@@ -157,33 +163,39 @@ def updateVideoKeyword(conn, keyword):
         )
 
         if filename or len(filename) > 0:
-            keyword = literal_eval(keyword.get())
+            if os.path.exists('./videos/' + os.path.basename(filename)) is False:
+                keyword = literal_eval(keyword.get())
 
-            strVideoPaths = StringVar()
+                strVideoPaths = StringVar()
 
-            if keyword[4] == 'None':
-                strVideoPaths.set('[]')
+                if keyword[4] == 'None':
+                    strVideoPaths.set('[]')
+                else:
+                    strVideoPaths.set(keyword[4])
+
+                lstVideoPaths = json.loads(strVideoPaths.get())
+                lstVideoPaths.append(os.path.basename(filename))
+
+                strVideoPathsToSave = json.dumps(lstVideoPaths)
+
+                cur = conn.cursor()
+                cur.execute(f"""UPDATE dict SET videos='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+                conn.commit()
+                cur.close()
+
+                listboxVideo.insert(len(lstVideoPaths), os.path.basename(filename))
+
+                shutil.copy2(filename, './videos')
+
+                messagebox.showinfo(
+                    title='Đã lưu thành công',
+                    message=filename
+                )
             else:
-                strVideoPaths.set(keyword[4])
-
-            lstVideoPaths = json.loads(strVideoPaths.get())
-            lstVideoPaths.append(os.path.basename(filename))
-
-            strVideoPathsToSave = json.dumps(lstVideoPaths)
-
-            cur = conn.cursor()
-            cur.execute(f"""UPDATE dict SET videos='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
-            conn.commit()
-            cur.close()
-
-            listboxVideo.insert(len(lstVideoPaths), os.path.basename(filename))
-
-            shutil.copy2(filename, './videos')
-
-            messagebox.showinfo(
-                title='Đã lưu thành công',
-                message=filename
-            )
+                messagebox.showinfo(
+                    title='Tập tin đã tồn tại',
+                    message='./videos/' + os.path.basename(filename)
+                )
 
 def updateNoteKeyword(conn, keyword, newText):
     if keyword is not None and len(keyword.get()) > 0:
