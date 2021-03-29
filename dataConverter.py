@@ -12,7 +12,7 @@ users = pd.read_csv('/Users/ducdo/Downloads/full_dic.tsv', sep='\t')
 users.to_sql('dict', conn, if_exists='append', index = False)
 
 # Check if virtual table can update
-print('run')
-c.execute("UPDATE dict SET POS = 'updated' WHERE definition = '1. Con chữ thứ nhất của bảng chữ cái tiếng Việt: chữ a thường (a); viết A hoa (A) ; từ A đến Z (từ đầu đến cuối, đủ mọi thứ).'")
+# print('run')
+# c.execute("UPDATE dict SET POS = 'updated' WHERE definition = '1. Con chữ thứ nhất của bảng chữ cái tiếng Việt: chữ a thường (a); viết A hoa (A) ; từ A đến Z (từ đầu đến cuối, đủ mọi thứ).'")
 
-conn.commit()
+# conn.commit()
