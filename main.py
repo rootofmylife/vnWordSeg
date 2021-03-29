@@ -439,13 +439,13 @@ def callbackImage(event):
     selection = event.widget.curselection()
     if selection:
         value = event.widget.get(selection[0])
-        os.startfile('./images/' + value)
+        os.startfile(os.path.join('./images/' + value))
 
 def callbackVideo(event):
     selection = event.widget.curselection()
     if selection:
         value = event.widget.get(selection[0])
-        os.startfile('./videos/' + value)
+        os.startfile(os.path.join('./videos/' + value))
 
 print('Starting to pre-processing...')
 
