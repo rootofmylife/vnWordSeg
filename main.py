@@ -226,8 +226,6 @@ def callbackOneMorpho(event):
 
         textDefinition.insert('1.0', txt_def)
 
-        print(data)
-
         # image
         if data[3] is not None:
             img_list = json.loads(data[3])
