@@ -239,11 +239,17 @@ labelIndependent.pack(fill=X)
 textIndependent = Text(frame_wordClass, height=6)
 textIndependent.pack(fill=X)
 
+buttonIndependent = Button(frame_wordClass, text="Cập nhật thông tin độc lập")
+buttonIndependent.pack(fill=X)
+
 labelDependent = Label(frame_wordClass, text="Không độc lập")
 labelDependent.pack(fill=X)
 
 textDependent = Text(frame_wordClass, height=6)
 textDependent.pack(fill=X)
+
+buttonDependent = Button(frame_wordClass, text="Cập nhật thông tin không độc lập")
+buttonDependent.pack(fill=X)
 
 # set position for word type
 frame_wordType = Frame(scrollable_frame)
@@ -279,13 +285,16 @@ listboxOthersMorpho.bind("<<ListboxSelect>>", callbackOthersMorpho)
 
 # set position for definition
 frame_definition = Frame(scrollable_frame)
-frame_definition.pack(fill=X, padx=6, pady=4)
+frame_definition.pack(expand=True, padx=6, pady=4)
 
 labelDefinition = Label(frame_definition, text="Định ngĩa")
 labelDefinition.pack(fill=X)
 
 textDefinition = Text(frame_definition, height=10)
 textDefinition.pack(fill=X)
+
+buttonDefinition = Button(frame_definition, text="Cập nhật thông tin định nghĩa")
+buttonDefinition.pack(fill=X)
 
 # set position for image
 frame_image = Frame(scrollable_frame)
@@ -294,13 +303,24 @@ frame_image.pack(expand=True, padx=6, pady=4)
 labelSelectImage = Label(frame_image, text="Chọn hình ảnh cần xem")
 labelSelectImage.pack(fill=X)
 
-labelImage = Label(frame_image, text="Image")
-labelImage.pack(fill=X, side=LEFT)
-
 listboxImage = Listbox(frame_image, height=10)
-listboxImage.pack(side=LEFT)
+listboxImage.pack(fill=X)
+
+buttonImage = Button(frame_image, text="Cập nhật hình ảnh")
+buttonImage.pack(fill=X)
 
 # set position for video
+frame_video = Frame(scrollable_frame)
+frame_video.pack(expand=True, padx=6, pady=4)
+
+labelSelectVideo = Label(frame_video, text="Chọn video cần xem")
+labelSelectVideo.pack(fill=X)
+
+listboxVideo = Listbox(frame_video, height=10)
+listboxVideo.pack(fill=X)
+
+buttonVideo = Button(frame_video, text="Cập nhật video")
+buttonVideo.pack(fill=X)
 
 # set position for notes
 frame_note = Frame(scrollable_frame)
@@ -311,6 +331,9 @@ labelNote.pack(fill=X)
 
 textNote = Text(frame_note, height=10)
 textNote.pack(fill=X)
+
+buttonNote = Button(frame_note, text="Cập nhật ghi chú")
+buttonNote.pack(fill=X)
 
 # set position for foreign
 frame_foreign = Frame(scrollable_frame)
@@ -324,6 +347,9 @@ listboxForeign.pack(side=LEFT)
 
 textForeign = Text(frame_foreign, height=10)
 textForeign.pack(side=LEFT, padx=6)
+
+buttonForeign = Button(frame_foreign, text="Cập nhật ngôn ngữ")
+buttonForeign.pack(fill=X)
 ####################################################
 
 container.pack(fill=BOTH, expand=True)
