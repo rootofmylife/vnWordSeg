@@ -135,6 +135,8 @@ def updateImageKeyword(conn, keyword):
             conn.commit()
             cur.close()
 
+            listboxImage.insert(len(lstImagePaths), os.path.basename(filename))
+
             shutil.copy2(filename, './images')
 
             messagebox.showinfo(
@@ -173,6 +175,8 @@ def updateVideoKeyword(conn, keyword):
             cur.execute(f"""UPDATE dict SET videos='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
             conn.commit()
             cur.close()
+
+            listboxVideo.insert(len(lstVideoPaths), os.path.basename(filename))
 
             shutil.copy2(filename, './videos')
 
