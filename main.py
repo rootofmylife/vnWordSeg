@@ -8,6 +8,8 @@ import sqlite3
 from sqlite3 import Error
 
 import os
+import json
+import shutil
 from ast import literal_eval
 
 def getHalfWindowSize(window):
@@ -101,51 +103,86 @@ def updateDep(depText):
 
     messagebox.showinfo("Trạng thái", "Đã lưu thành công")
 
-def getImagePath():
-    print("here")
-    filetypes = (
-        ('Image files', ('.png', '.jpg', '.jpeg')),
-    )
-
-    filename = askopenfilename(
-        title='Open a file',
-        initialdir='/',
-        filetypes=filetypes
-    )
-
-    os.startfile(filename)
-    # if not filename or len(filename) < 1:
-    #     messagebox.showinfo(
-    #         title='Selected File',
-    #         message=filename
-    #     )
-
-def getVideoPath():
-    print("here")
-    filetypes = (
-        ('Video files', ('.mp4', '.avi', '.mov', '.mpg', '.m4v', '.flv', '.mkv', '.webm')),
-    )
-
-    filename = askopenfilename(
-        title='Open a video',
-        initialdir='/',
-        filetypes=filetypes
-    )
-
-    if not filename or len(filename) < 1:
-        messagebox.showinfo(
-            title='Selected Video',
-            message=filename
+def updateImageKeyword(conn, keyword):
+    if keyword is not None and len(keyword.get()) > 0:
+        filetypes = (
+            ('Image files', ('.png', '.jpg', '.jpeg')),
         )
 
-def updateImageKeyword(conn, keyword):
-    pass
+        filename = askopenfilename(
+            title='Open a file',
+            initialdir='/',
+            filetypes=filetypes
+        )
+
+        if filename or len(filename) > 0:
+            keyword = literal_eval(keyword.get())
+
+            strImagePaths = StringVar()
+
+            if keyword[3] == 'None':
+                strImagePaths.set('[]')
+            else:
+                strImagePaths.set(keyword[3])
+
+            lstImagePaths = json.loads(strImagePaths.get())
+            lstImagePaths.append(os.path.basename(filename))
+
+            strImagePathsToSave = json.dumps(lstImagePaths)
+
+            cur = conn.cursor()
+            cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+            conn.commit()
+            cur.close()
+
+            shutil.copy2(filename, './images')
+
+            messagebox.showinfo(
+                title='Đã lưu thành công',
+                message=filename
+            )
 
 def updateVideoKeyword(conn, keyword):
-    pass
+    if keyword is not None and len(keyword.get()) > 0: 
+        filetypes = (
+            ('Video files', ('.mp4', '.avi', '.mov', '.mpg', '.m4v', '.flv', '.mkv', '.webm')),
+        )
+
+        filename = askopenfilename(
+            title='Open a video',
+            initialdir='/',
+            filetypes=filetypes
+        )
+
+        if filename or len(filename) > 0:
+            keyword = literal_eval(keyword.get())
+
+            strVideoPaths = StringVar()
+
+            if keyword[4] == 'None':
+                strVideoPaths.set('[]')
+            else:
+                strVideoPaths.set(keyword[4])
+
+            lstVideoPaths = json.loads(strVideoPaths.get())
+            lstVideoPaths.append(os.path.basename(filename))
+
+            strVideoPathsToSave = json.dumps(lstVideoPaths)
+
+            cur = conn.cursor()
+            cur.execute(f"""UPDATE dict SET videos='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+            conn.commit()
+            cur.close()
+
+            shutil.copy2(filename, './videos')
+
+            messagebox.showinfo(
+                title='Đã lưu thành công',
+                message=filename
+            )
 
 def updateNoteKeyword(conn, keyword, newText):
-    if keyword is not None:
+    if keyword is not None and len(keyword.get()) > 0:
         keyword = literal_eval(keyword.get())
         cur = conn.cursor()
         cur.execute(f"""UPDATE dict SET notes='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
@@ -173,16 +210,18 @@ def callbackOneMorpho(event):
 
         textDefinition.insert('1.0', txt_def)
 
+        print(data)
+
         # image
         if data[3] is not None:
-            img_list = data[3].split(';')
+            img_list = json.loads(data[3])
             
             for imgIndex, imgItem in enumerate(img_list):
                 listboxImage.insert(imgIndex + 1, imgItem)
 
         # video
         if data[4] is not None:
-            vid_list = data[3].split(';')
+            vid_list = json.loads(data[4])
 
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
@@ -214,16 +253,16 @@ def callbackTwoMorpho(event):
 
         textDefinition.insert('1.0', txt_def)
 
-        # image
+       # image
         if data[3] is not None:
-            img_list = data[3].split(';')
+            img_list = json.loads(data[3])
             
             for imgIndex, imgItem in enumerate(img_list):
                 listboxImage.insert(imgIndex + 1, imgItem)
 
         # video
         if data[4] is not None:
-            vid_list = data[3].split(';')
+            vid_list = json.loads(data[4])
 
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
@@ -255,14 +294,14 @@ def callbackTwoReversedMorpho(event):
 
         # image
         if data[3] is not None:
-            img_list = data[3].split(';')
+            img_list = json.loads(data[3])
             
             for imgIndex, imgItem in enumerate(img_list):
                 listboxImage.insert(imgIndex + 1, imgItem)
 
         # video
         if data[4] is not None:
-            vid_list = data[3].split(';')
+            vid_list = json.loads(data[4])
 
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
@@ -294,14 +333,14 @@ def callbackThreeMorpho(event):
 
         # image
         if data[3] is not None:
-            img_list = data[3].split(';')
+            img_list = json.loads(data[3])
             
             for imgIndex, imgItem in enumerate(img_list):
                 listboxImage.insert(imgIndex + 1, imgItem)
 
         # video
         if data[4] is not None:
-            vid_list = data[3].split(';')
+            vid_list = json.loads(data[4])
 
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
@@ -333,14 +372,14 @@ def callbackFourMorpho(event):
 
         # image
         if data[3] is not None:
-            img_list = data[3].split(';')
+            img_list = json.loads(data[3])
             
             for imgIndex, imgItem in enumerate(img_list):
                 listboxImage.insert(imgIndex + 1, imgItem)
 
         # video
         if data[4] is not None:
-            vid_list = data[3].split(';')
+            vid_list = json.loads(data[4])
 
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
@@ -372,14 +411,14 @@ def callbackOthersMorpho(event):
 
         # image
         if data[3] is not None:
-            img_list = data[3].split(';')
+            img_list = json.loads(data[3])
             
             for imgIndex, imgItem in enumerate(img_list):
                 listboxImage.insert(imgIndex + 1, imgItem)
 
         # video
         if data[4] is not None:
-            vid_list = data[3].split(';')
+            vid_list = json.loads(data[4])
 
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
@@ -395,6 +434,18 @@ def callbackOthersMorpho(event):
 
             for forgIndex, forgItem in enumerate(forg_list):
                 listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+
+def callbackImage(event):
+    selection = event.widget.curselection()
+    if selection:
+        value = event.widget.get(selection[0])
+        os.startfile('./images/' + value)
+
+def callbackVideo(event):
+    selection = event.widget.curselection()
+    if selection:
+        value = event.widget.get(selection[0])
+        os.startfile('./videos/' + value)
 
 print('Starting to pre-processing...')
 
@@ -579,8 +630,9 @@ labelSelectImage.pack(fill=X)
 
 listboxImage = Listbox(frame_image, height=15)
 listboxImage.pack(fill=X)
+listboxImage.bind("<<ListboxSelect>>", callbackImage)
 
-buttonImage = Button(frame_image, text="Cập nhật hình ảnh", command=lambda : getImagePath())
+buttonImage = Button(frame_image, text="Cập nhật hình ảnh", command=lambda : updateImageKeyword(conn, currentSelectedKeyword))
 buttonImage.pack(fill=X)
 
 # set position for video
@@ -592,8 +644,9 @@ labelSelectVideo.pack(fill=X)
 
 listboxVideo = Listbox(frame_video, height=15)
 listboxVideo.pack(fill=X)
+listboxVideo.bind("<<ListboxSelect>>", callbackVideo)
 
-buttonVideo = Button(frame_video, text="Cập nhật video", command=lambda : getVideoPath())
+buttonVideo = Button(frame_video, text="Cập nhật video", command=lambda : updateVideoKeyword(conn, currentSelectedKeyword))
 buttonVideo.pack(fill=X)
 
 # set position for notes
