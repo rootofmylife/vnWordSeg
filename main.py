@@ -128,22 +128,33 @@ def updateImageKeyword(conn, keyword):
 
                 lstImagePaths = json.loads(strImagePaths.get())
                 lstImagePaths.append(os.path.basename(filename))
-
                 strImagePathsToSave = json.dumps(lstImagePaths)
 
+                # save to database
                 cur = conn.cursor()
                 cur.execute(f"""UPDATE dict SET images='{strImagePathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
                 conn.commit()
                 cur.close()
 
+                # save to UI
                 listboxImage.insert(len(lstImagePaths), os.path.basename(filename))
 
+                # save to hard disk
                 shutil.copy2(filename, './images')
 
-                messagebox.showinfo(
-                    title='Đã lưu thành công',
-                    message=filename
-                )
+                # save to selected item
+                keyword = list(keyword)
+                keyword[3] = json.dumps(lstImagePaths)
+                currentSelectedKeyword.set(tuple(keyword))
+
+                if cur.rowcount < 1:
+                    messagebox.error("Trạng thái", "Lưu thất bại")
+                else:
+                    messagebox.showinfo(
+                        title='Đã lưu thành công',
+                        message=filename
+                    )
+                
             else:
                 messagebox.showinfo(
                     title='Tập tin đã tồn tại',
@@ -175,22 +186,33 @@ def updateVideoKeyword(conn, keyword):
 
                 lstVideoPaths = json.loads(strVideoPaths.get())
                 lstVideoPaths.append(os.path.basename(filename))
-
                 strVideoPathsToSave = json.dumps(lstVideoPaths)
 
+                # save to database
                 cur = conn.cursor()
                 cur.execute(f"""UPDATE dict SET videos='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
                 conn.commit()
                 cur.close()
 
+                # save to UI
                 listboxVideo.insert(len(lstVideoPaths), os.path.basename(filename))
 
+                # save to hard disk
                 shutil.copy2(filename, './videos')
 
-                messagebox.showinfo(
-                    title='Đã lưu thành công',
-                    message=filename
-                )
+                # save to selected item
+                keyword = list(keyword)
+                keyword[3] = json.dumps(lstVideoPaths)
+                currentSelectedKeyword.set(tuple(keyword))
+
+                if cur.rowcount < 1:
+                    messagebox.error("Trạng thái", "Lưu thất bại")
+                else:
+                    messagebox.showinfo(
+                        title='Đã lưu thành công',
+                        message=filename
+                    )
+                
             else:
                 messagebox.showinfo(
                     title='Tập tin đã tồn tại',
@@ -201,8 +223,8 @@ def deleteImageKeyword(conn, keyword):
     if keyword is not None and len(keyword.get()) > 0:
         filename = listboxImage.get(listboxImage.curselection())
 
-        # Remove in hard disk
         if os.path.exists('./images/' + filename):
+            # Remove in hard disk
             os.remove('./images/' + filename)
 
             # Remove on UI
@@ -229,17 +251,25 @@ def deleteImageKeyword(conn, keyword):
             conn.commit()
             cur.close()
 
-            messagebox.showinfo(
-                title='Đã xoá thành công',
-                message='./images/' + filename
-            )
+            # save to selected item
+            keyword = list(keyword)
+            keyword[3] = json.dumps(lstImagePaths)
+            currentSelectedKeyword.set(tuple(keyword))
+
+            if cur.rowcount < 1:
+                messagebox.error("Trạng thái", "Xoá thất bại")
+            else:
+                messagebox.showinfo(
+                    title='Đã xoá thành công',
+                    message='./images/' + filename
+                )
 
 def deleteVideoKeyword(conn, keyword):
     if keyword is not None and len(keyword.get()) > 0:
         filename = listboxVideo.get(listboxVideo.curselection())
 
-        # Remove in hard disk
         if os.path.exists('./videos/' + filename):
+            # Remove in hard disk
             os.remove('./videos/' + filename)
 
             # Remove on UI
@@ -266,10 +296,18 @@ def deleteVideoKeyword(conn, keyword):
             conn.commit()
             cur.close()
 
-            messagebox.showinfo(
-                title='Đã xoá thành công',
-                message='./videos' + filename
-            )
+            # save to selected item
+            keyword = list(keyword)
+            keyword[3] = json.dumps(lstVideoPaths)
+            currentSelectedKeyword.set(tuple(keyword))
+
+            if cur.rowcount < 1:
+                messagebox.error("Trạng thái", "Xoá thất bại")
+            else:
+                messagebox.showinfo(
+                    title='Đã xoá thành công',
+                    message='./videos' + filename
+                )
 
 def updateNoteKeyword(conn, keyword, newText):
     if keyword is not None and len(keyword.get()) > 0:
