@@ -1218,7 +1218,7 @@ textRussia = Text(frame_russia,  width=20, height=10)
 textRussia.pack()
 textRussia.configure(font=myFont)
 
-buttonRussia = Button(frame_russia, text="Cập nhật ngôn ngữ Nga", , command=lambda : updateRussiaKeyword(conn, currentSelectedKeyword, textRussia.get('1.0', 'end-1c')))
+buttonRussia = Button(frame_russia, text="Cập nhật ngôn ngữ Nga", command=lambda : updateRussiaKeyword(conn, currentSelectedKeyword, textRussia.get('1.0', 'end-1c')))
 buttonRussia.pack(fill=X)
 
 # chinese
@@ -1232,7 +1232,7 @@ textChinese = Text(frame_chinese, width=20, height=10)
 textChinese.pack()
 textChinese.configure(font=myFont)
 
-buttonChinese = Button(frame_chinese, text="Cập nhật ngôn ngữ Trung", , command=lambda : updateChineseKeyword(conn, currentSelectedKeyword, textChinese.get('1.0', 'end-1c')))
+buttonChinese = Button(frame_chinese, text="Cập nhật ngôn ngữ Trung", command=lambda : updateChineseKeyword(conn, currentSelectedKeyword, textChinese.get('1.0', 'end-1c')))
 buttonChinese.pack(fill=X)
 
 frame_LayoutForeignTwo = Frame(frame_foreign)
@@ -1249,7 +1249,7 @@ textJapan = Text(frame_japan, width=20, height=10)
 textJapan.pack()
 textJapan.configure(font=myFont)
 
-buttonJapan = Button(frame_japan, text="Cập nhật ngôn ngữ Nhật", , command=lambda : updateJapanKeyword(conn, currentSelectedKeyword, textJapan.get('1.0', 'end-1c')))
+buttonJapan = Button(frame_japan, text="Cập nhật ngôn ngữ Nhật", command=lambda : updateJapanKeyword(conn, currentSelectedKeyword, textJapan.get('1.0', 'end-1c')))
 buttonJapan.pack(fill=X)
 
 # korea
