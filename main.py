@@ -434,9 +434,96 @@ def updateNoteKeyword(conn, keyword, newText):
         else:
             messagebox.showinfo("Trạng thái", "Đã lưu thành công")
 
-def updateForeignKeyword(conn, keyword):
+def updateEnglishKeyword(conn, keyword, newText):
     if keyword is not None and len(keyword.get()) > 0:
-        pass
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET english='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Anh thành công")
+
+def updateFranceKeyword(conn, keyword, newText):
+    if keyword is not None and len(keyword.get()) > 0:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET france='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Pháp thành công")
+
+def updateRussiaKeyword(conn, keyword, newText):
+    if keyword is not None and len(keyword.get()) > 0:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET russia='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Nga thành công")
+
+def updateChineseKeyword(conn, keyword, newText):
+    if keyword is not None and len(keyword.get()) > 0:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET chinese='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Trung thành công")
+
+def updateJapanKeyword(conn, keyword, newText):
+    if keyword is not None and len(keyword.get()) > 0:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET japan='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Nhật thành công")
+
+def updateKoreaKeyword(conn, keyword, newText):
+    if keyword is not None and len(keyword.get()) > 0:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET korea='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Hàn thành công")
+
+def updateSpainKeyword(conn, keyword, newText):
+    if keyword is not None and len(keyword.get()) > 0:
+        keyword = literal_eval(keyword.get())
+        cur = conn.cursor()
+        cur.execute(f"""UPDATE dict SET spain='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+        conn.commit()
+        cur.close()
+
+        if cur.rowcount < 1:
+            messagebox.error("Trạng thái", "Lưu thất bại")
+        else:
+            messagebox.showinfo("Trạng thái", "Đã lưu tiếng Tây Ban Nha thành công")
 
 def callbackOneMorpho(event):
     selection = event.widget.curselection()
@@ -465,17 +552,52 @@ def callbackOneMorpho(event):
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
 
-        # note
+        # audio
         if data[5] is not None:
-            textNote.delete('1.0', END)
-            textNote.insert('1.0', data[5])
+            aud_list = json.loads(data[5])
 
-        # foreign
+            for audIndex, audItem in enumerate(aud_list):
+                listboxAudio.insert(audIndex + 1, audItem)
+
+        # note
         if data[6] is not None:
-            forg_list = data[6].split(';')
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[6])
 
-            for forgIndex, forgItem in enumerate(forg_list):
-                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+        # english
+        if data[7] is not None:
+            textEnglish.delete('1.0', END)
+            textEnglish.insert('1.0', data[7])
+
+        # france
+        if data[8] is not None:
+            textFrance.delete('1.0', END)
+            textFrance.insert('1.0', data[8])
+
+        # russia
+        if data[9] is not None:
+            textRussia.delete('1.0', END)
+            textRussia.insert('1.0', data[9])
+
+        # chinese
+        if data[10] is not None:
+            textChinese.delete('1.0', END)
+            textChinese.insert('1.0', data[10])
+
+        # japan
+        if data[11] is not None:
+            textJapan.delete('1.0', END)
+            textJapan.insert('1.0', data[11])
+
+        # korea
+        if data[12] is not None:
+            textKorea.delete('1.0', END)
+            textKorea.insert('1.0', data[12])
+
+        # spain
+        if data[13] is not None:
+            textSpain.delete('1.0', END)
+            textSpain.insert('1.0', data[13])
 
         return data
 
@@ -506,17 +628,52 @@ def callbackTwoMorpho(event):
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
 
-        # note
+        # audio
         if data[5] is not None:
-            textNote.delete('1.0', END)
-            textNote.insert('1.0', data[5])
+            aud_list = json.loads(data[5])
 
-        # foreign
+            for audIndex, audItem in enumerate(aud_list):
+                listboxAudio.insert(audIndex + 1, audItem)
+
+        # note
         if data[6] is not None:
-            forg_list = data[6].split(';')
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[6])
 
-            for forgIndex, forgItem in enumerate(forg_list):
-                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+        # english
+        if data[7] is not None:
+            textEnglish.delete('1.0', END)
+            textEnglish.insert('1.0', data[7])
+
+        # france
+        if data[8] is not None:
+            textFrance.delete('1.0', END)
+            textFrance.insert('1.0', data[8])
+
+        # russia
+        if data[9] is not None:
+            textRussia.delete('1.0', END)
+            textRussia.insert('1.0', data[9])
+
+        # chinese
+        if data[10] is not None:
+            textChinese.delete('1.0', END)
+            textChinese.insert('1.0', data[10])
+
+        # japan
+        if data[11] is not None:
+            textJapan.delete('1.0', END)
+            textJapan.insert('1.0', data[11])
+
+        # korea
+        if data[12] is not None:
+            textKorea.delete('1.0', END)
+            textKorea.insert('1.0', data[12])
+
+        # spain
+        if data[13] is not None:
+            textSpain.delete('1.0', END)
+            textSpain.insert('1.0', data[13])
 
 def callbackTwoReversedMorpho(event):
     selection = event.widget.curselection()
@@ -545,17 +702,52 @@ def callbackTwoReversedMorpho(event):
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
 
-        # note
+        # audio
         if data[5] is not None:
-            textNote.delete('1.0', END)
-            textNote.insert('1.0', data[5])
+            aud_list = json.loads(data[5])
 
-        # foreign
+            for audIndex, audItem in enumerate(aud_list):
+                listboxAudio.insert(audIndex + 1, audItem)
+
+        # note
         if data[6] is not None:
-            forg_list = data[6].split(';')
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[6])
 
-            for forgIndex, forgItem in enumerate(forg_list):
-                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+        # english
+        if data[7] is not None:
+            textEnglish.delete('1.0', END)
+            textEnglish.insert('1.0', data[7])
+
+        # france
+        if data[8] is not None:
+            textFrance.delete('1.0', END)
+            textFrance.insert('1.0', data[8])
+
+        # russia
+        if data[9] is not None:
+            textRussia.delete('1.0', END)
+            textRussia.insert('1.0', data[9])
+
+        # chinese
+        if data[10] is not None:
+            textChinese.delete('1.0', END)
+            textChinese.insert('1.0', data[10])
+
+        # japan
+        if data[11] is not None:
+            textJapan.delete('1.0', END)
+            textJapan.insert('1.0', data[11])
+
+        # korea
+        if data[12] is not None:
+            textKorea.delete('1.0', END)
+            textKorea.insert('1.0', data[12])
+
+        # spain
+        if data[13] is not None:
+            textSpain.delete('1.0', END)
+            textSpain.insert('1.0', data[13])
 
 def callbackThreeMorpho(event):
     selection = event.widget.curselection()
@@ -584,17 +776,52 @@ def callbackThreeMorpho(event):
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
 
-        # note
+        # audio
         if data[5] is not None:
-            textNote.delete('1.0', END)
-            textNote.insert('1.0', data[5])
+            aud_list = json.loads(data[5])
 
-        # foreign
+            for audIndex, audItem in enumerate(aud_list):
+                listboxAudio.insert(audIndex + 1, audItem)
+
+        # note
         if data[6] is not None:
-            forg_list = data[6].split(';')
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[6])
 
-            for forgIndex, forgItem in enumerate(forg_list):
-                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+        # english
+        if data[7] is not None:
+            textEnglish.delete('1.0', END)
+            textEnglish.insert('1.0', data[7])
+
+        # france
+        if data[8] is not None:
+            textFrance.delete('1.0', END)
+            textFrance.insert('1.0', data[8])
+
+        # russia
+        if data[9] is not None:
+            textRussia.delete('1.0', END)
+            textRussia.insert('1.0', data[9])
+
+        # chinese
+        if data[10] is not None:
+            textChinese.delete('1.0', END)
+            textChinese.insert('1.0', data[10])
+
+        # japan
+        if data[11] is not None:
+            textJapan.delete('1.0', END)
+            textJapan.insert('1.0', data[11])
+
+        # korea
+        if data[12] is not None:
+            textKorea.delete('1.0', END)
+            textKorea.insert('1.0', data[12])
+
+        # spain
+        if data[13] is not None:
+            textSpain.delete('1.0', END)
+            textSpain.insert('1.0', data[13])
 
 def callbackFourMorpho(event):
     selection = event.widget.curselection()
@@ -623,17 +850,52 @@ def callbackFourMorpho(event):
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
 
-        # note
+        # audio
         if data[5] is not None:
-            textNote.delete('1.0', END)
-            textNote.insert('1.0', data[5])
+            aud_list = json.loads(data[5])
 
-        # foreign
+            for audIndex, audItem in enumerate(aud_list):
+                listboxAudio.insert(audIndex + 1, audItem)
+
+        # note
         if data[6] is not None:
-            forg_list = data[6].split(';')
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[6])
 
-            for forgIndex, forgItem in enumerate(forg_list):
-                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+        # english
+        if data[7] is not None:
+            textEnglish.delete('1.0', END)
+            textEnglish.insert('1.0', data[7])
+
+        # france
+        if data[8] is not None:
+            textFrance.delete('1.0', END)
+            textFrance.insert('1.0', data[8])
+
+        # russia
+        if data[9] is not None:
+            textRussia.delete('1.0', END)
+            textRussia.insert('1.0', data[9])
+
+        # chinese
+        if data[10] is not None:
+            textChinese.delete('1.0', END)
+            textChinese.insert('1.0', data[10])
+
+        # japan
+        if data[11] is not None:
+            textJapan.delete('1.0', END)
+            textJapan.insert('1.0', data[11])
+
+        # korea
+        if data[12] is not None:
+            textKorea.delete('1.0', END)
+            textKorea.insert('1.0', data[12])
+
+        # spain
+        if data[13] is not None:
+            textSpain.delete('1.0', END)
+            textSpain.insert('1.0', data[13])
 
 def callbackOthersMorpho(event):
     selection = event.widget.curselection()
@@ -662,17 +924,52 @@ def callbackOthersMorpho(event):
             for vidIndex, vidItem in enumerate(vid_list):
                 listboxVideo.insert(vidIndex + 1, vidItem)
 
-        # note
+        # audio
         if data[5] is not None:
-            textNote.delete('1.0', END)
-            textNote.insert('1.0', data[5])
+            aud_list = json.loads(data[5])
 
-        # foreign
+            for audIndex, audItem in enumerate(aud_list):
+                listboxAudio.insert(audIndex + 1, audItem)
+
+        # note
         if data[6] is not None:
-            forg_list = data[6].split(';')
+            textNote.delete('1.0', END)
+            textNote.insert('1.0', data[6])
 
-            for forgIndex, forgItem in enumerate(forg_list):
-                listboxForeign.insert(forgIndex + 1, forgItem.split('<|>')[0])
+        # english
+        if data[7] is not None:
+            textEnglish.delete('1.0', END)
+            textEnglish.insert('1.0', data[7])
+
+        # france
+        if data[8] is not None:
+            textFrance.delete('1.0', END)
+            textFrance.insert('1.0', data[8])
+
+        # russia
+        if data[9] is not None:
+            textRussia.delete('1.0', END)
+            textRussia.insert('1.0', data[9])
+
+        # chinese
+        if data[10] is not None:
+            textChinese.delete('1.0', END)
+            textChinese.insert('1.0', data[10])
+
+        # japan
+        if data[11] is not None:
+            textJapan.delete('1.0', END)
+            textJapan.insert('1.0', data[11])
+
+        # korea
+        if data[12] is not None:
+            textKorea.delete('1.0', END)
+            textKorea.insert('1.0', data[12])
+
+        # spain
+        if data[13] is not None:
+            textSpain.delete('1.0', END)
+            textSpain.insert('1.0', data[13])
 
 def callbackImage(event):
     selection = event.widget.curselection()
@@ -893,7 +1190,7 @@ textEnglish = Text(frame_english, width=20, height=10)
 textEnglish.pack()
 textEnglish.configure(font=myFont)
 
-buttonEnglish = Button(frame_english, text="Cập nhật ngôn ngữ Anh")
+buttonEnglish = Button(frame_english, text="Cập nhật ngôn ngữ Anh", command=lambda : updateEnglishKeyword(conn, currentSelectedKeyword, textEnglish.get('1.0', 'end-1c')))
 buttonEnglish.pack(fill=X)
 
 # france
@@ -907,7 +1204,7 @@ textFrance = Text(frame_france, width=20, height=10)
 textFrance.pack()
 textFrance.configure(font=myFont)
 
-buttonFrance = Button(frame_france, text="Cập nhật ngôn ngữ Pháp")
+buttonFrance = Button(frame_france, text="Cập nhật ngôn ngữ Pháp", command=lambda : updateFranceKeyword(conn, currentSelectedKeyword, textFrance.get('1.0', 'end-1c')))
 buttonFrance.pack(fill=X)
 
 # russia
@@ -921,7 +1218,7 @@ textRussia = Text(frame_russia,  width=20, height=10)
 textRussia.pack()
 textRussia.configure(font=myFont)
 
-buttonRussia = Button(frame_russia, text="Cập nhật ngôn ngữ Nga")
+buttonRussia = Button(frame_russia, text="Cập nhật ngôn ngữ Nga", , command=lambda : updateRussiaKeyword(conn, currentSelectedKeyword, textRussia.get('1.0', 'end-1c')))
 buttonRussia.pack(fill=X)
 
 # chinese
@@ -935,7 +1232,7 @@ textChinese = Text(frame_chinese, width=20, height=10)
 textChinese.pack()
 textChinese.configure(font=myFont)
 
-buttonChinese = Button(frame_chinese, text="Cập nhật ngôn ngữ Trung")
+buttonChinese = Button(frame_chinese, text="Cập nhật ngôn ngữ Trung", , command=lambda : updateChineseKeyword(conn, currentSelectedKeyword, textChinese.get('1.0', 'end-1c')))
 buttonChinese.pack(fill=X)
 
 frame_LayoutForeignTwo = Frame(frame_foreign)
@@ -952,7 +1249,7 @@ textJapan = Text(frame_japan, width=20, height=10)
 textJapan.pack()
 textJapan.configure(font=myFont)
 
-buttonJapan = Button(frame_japan, text="Cập nhật ngôn ngữ Nhật")
+buttonJapan = Button(frame_japan, text="Cập nhật ngôn ngữ Nhật", , command=lambda : updateJapanKeyword(conn, currentSelectedKeyword, textJapan.get('1.0', 'end-1c')))
 buttonJapan.pack(fill=X)
 
 # korea
@@ -966,7 +1263,7 @@ textKorea = Text(frame_korea, width=20, height=10)
 textKorea.pack()
 textKorea.configure(font=myFont)
 
-buttonKorea = Button(frame_korea, text="Cập nhật ngôn ngữ Hàn")
+buttonKorea = Button(frame_korea, text="Cập nhật ngôn ngữ Hàn", command=lambda : updateKoreaKeyword(conn, currentSelectedKeyword, textKorea.get('1.0', 'end-1c')))
 buttonKorea.pack(fill=X)
 
 # spain
@@ -980,7 +1277,7 @@ textSpain = Text(frame_spain, width=20, height=10)
 textSpain.pack()
 textSpain.configure(font=myFont)
 
-buttonSpain = Button(frame_spain, text="Cập nhật ngôn ngữ Tây Ban Nha")
+buttonSpain = Button(frame_spain, text="Cập nhật ngôn ngữ Tây Ban Nha", command=lambda : updateSpainKeyword(conn, currentSelectedKeyword, textSpain.get('1.0', 'end-1c')))
 buttonSpain.pack(fill=X)
 
 # frame for image & video
