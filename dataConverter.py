@@ -4,7 +4,7 @@ import pandas as pd
 conn = sqlite3.connect('./my_fts_data_update.db')
 c = conn.cursor()
 
-c.execute('''CREATE VIRTUAL TABLE dict USING FTS5(word, POS, definition, images, videos, notes, foreign)''')
+c.execute('''CREATE VIRTUAL TABLE dict USING FTS5(word, POS, definition, images, videos, audios, notes, foreign)''')
 
 users = pd.read_csv('/Users/ducdo/Downloads/full_dic.tsv', sep='\t')
 
