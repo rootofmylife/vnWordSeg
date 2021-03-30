@@ -872,6 +872,117 @@ textDefinition.configure(font=myFont)
 # buttonDefinition = Button(frame_definition, text="Cập nhật thông tin định nghĩa")
 # buttonDefinition.pack(fill=X)
 
+# set position for foreign
+frame_foreign = Frame(scrollable_frame)
+frame_foreign.pack(fill=X, padx=6, pady=10)
+
+labelForeign = Label(frame_foreign, text="Dịch sang tiếng ngoại")
+labelForeign.pack(fill=X)
+
+frame_LayoutForeignOne = Frame(frame_foreign)
+frame_LayoutForeignOne.pack(expand=True, padx=6, pady=6)
+
+# english
+frame_english = Frame(frame_LayoutForeignOne)
+frame_english.pack(side=LEFT, padx=10, pady=4)
+
+labelEnglish = Label(frame_english, text="tiếng Anh")
+labelEnglish.pack(fill=X)
+
+textEnglish = Text(frame_english, width=20, height=10)
+textEnglish.pack()
+textEnglish.configure(font=myFont)
+
+buttonEnglish = Button(frame_english, text="Cập nhật ngôn ngữ Anh")
+buttonEnglish.pack(fill=X)
+
+# france
+frame_france = Frame(frame_LayoutForeignOne)
+frame_france.pack(side=LEFT, padx=10, pady=4)
+
+labelFrance = Label(frame_france, text="tiếng Pháp")
+labelFrance.pack(fill=X)
+
+textFrance = Text(frame_france, width=20, height=10)
+textFrance.pack()
+textFrance.configure(font=myFont)
+
+buttonFrance = Button(frame_france, text="Cập nhật ngôn ngữ Pháp")
+buttonFrance.pack(fill=X)
+
+# russia
+frame_russia = Frame(frame_LayoutForeignOne)
+frame_russia.pack(side=LEFT, padx=10, pady=4)
+
+labelRussia = Label(frame_russia, text="tiếng Nga")
+labelRussia.pack(fill=X)
+
+textRussia = Text(frame_russia,  width=20, height=10)
+textRussia.pack()
+textRussia.configure(font=myFont)
+
+buttonRussia = Button(frame_russia, text="Cập nhật ngôn ngữ Nga")
+buttonRussia.pack(fill=X)
+
+# chinese
+frame_chinese = Frame(frame_LayoutForeignOne)
+frame_chinese.pack(side=LEFT, padx=10, pady=4)
+
+labelChinese = Label(frame_chinese, text="tiếng Trung")
+labelChinese.pack(fill=X)
+
+textChinese = Text(frame_chinese, width=20, height=10)
+textChinese.pack()
+textChinese.configure(font=myFont)
+
+buttonChinese = Button(frame_chinese, text="Cập nhật ngôn ngữ Trung")
+buttonChinese.pack(fill=X)
+
+frame_LayoutForeignTwo = Frame(frame_foreign)
+frame_LayoutForeignTwo.pack(expand=True, padx=6, pady=6)
+
+# japan
+frame_japan = Frame(frame_LayoutForeignTwo)
+frame_japan.pack(side=LEFT, padx=10, pady=4)
+
+labelJapan = Label(frame_japan, text="tiếng Nhật")
+labelJapan.pack(fill=X)
+
+textJapan = Text(frame_japan, width=20, height=10)
+textJapan.pack()
+textJapan.configure(font=myFont)
+
+buttonJapan = Button(frame_japan, text="Cập nhật ngôn ngữ Nhật")
+buttonJapan.pack(fill=X)
+
+# korea
+frame_korea = Frame(frame_LayoutForeignTwo)
+frame_korea.pack(side=LEFT, padx=10, pady=4)
+
+labelKorea = Label(frame_korea, text="tiếng Hàn")
+labelKorea.pack(fill=X)
+
+textKorea = Text(frame_korea, width=20, height=10)
+textKorea.pack()
+textKorea.configure(font=myFont)
+
+buttonKorea = Button(frame_korea, text="Cập nhật ngôn ngữ Hàn")
+buttonKorea.pack(fill=X)
+
+# spain
+frame_spain = Frame(frame_LayoutForeignTwo)
+frame_spain.pack(side=LEFT, padx=10, pady=4)
+
+labelSpain = Label(frame_spain, text="tiếng Tây Ban Nha")
+labelSpain.pack(fill=X)
+
+textSpain = Text(frame_spain, width=20, height=10)
+textSpain.pack()
+textSpain.configure(font=myFont)
+
+buttonSpain = Button(frame_spain, text="Cập nhật ngôn ngữ Tây Ban Nha")
+buttonSpain.pack(fill=X)
+
 # frame for image & video
 frame_ImageVideo = Frame(scrollable_frame)
 frame_ImageVideo.pack(expand=True, padx=6, pady=4)
@@ -939,23 +1050,6 @@ textNote.pack(fill=X)
 
 buttonNote = Button(frame_note, text="Cập nhật ghi chú", command=lambda : updateNoteKeyword(conn, currentSelectedKeyword, textNote.get('1.0', 'end-1c')))
 buttonNote.pack(fill=X)
-
-# set position for foreign
-frame_foreign = Frame(scrollable_frame)
-frame_foreign.pack(expand=True, padx=6, pady=6)
-
-labelForeign = Label(frame_foreign, text="Ngôn ngữ khác")
-labelForeign.pack(fill=X)
-
-listboxForeign = Listbox(frame_foreign, height=8)
-listboxForeign.pack(side=LEFT)
-
-textForeign = Text(frame_foreign, height=10)
-textForeign.pack(side=LEFT, padx=6)
-textForeign.configure(font=myFont)
-
-buttonForeign = Button(frame_foreign, text="Cập nhật ngôn ngữ")
-buttonForeign.pack(fill=X)
 ####################################################
 
 container.pack(fill=BOTH, expand=True)
