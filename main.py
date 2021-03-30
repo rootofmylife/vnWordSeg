@@ -228,6 +228,64 @@ def updateVideoKeyword(conn, keyword):
                     message='./videos/' + os.path.basename(filename)
                 )
 
+def updateAudioKeyword(conn, keyword):
+    if keyword is not None and len(keyword.get()) > 0: 
+        filetypes = (
+            ('Audio files', ('.mp3', '.m4a', '.wav')),
+        )
+
+        filename = askopenfilename(
+            title='Open a audio',
+            initialdir='/',
+            filetypes=filetypes
+        )
+
+        if filename or len(filename) > 0:
+            if os.path.exists('./audios/' + os.path.basename(filename)) is False:
+                keyword = literal_eval(keyword.get())
+
+                strAudioPaths = StringVar()
+
+                if keyword[4] == 'None':
+                    strAudioPaths.set('[]')
+                else:
+                    strAudioPaths.set(keyword[4])
+
+                lstAudioPaths = json.loads(strAudioPaths.get())
+                lstAudioPaths.append(os.path.basename(filename))
+                strAudioPathsToSave = json.dumps(lstAudioPaths)
+
+                # save to database
+                cur = conn.cursor()
+                cur.execute(f"""UPDATE dict SET audios='{strAudioPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+                conn.commit()
+                cur.close()
+
+                # save to UI
+                listboxAudio.insert(len(lstAudioPaths), os.path.basename(filename))
+
+                # save to hard disk
+                shutil.copy2(filename, './audios')
+
+                # save to selected item
+                keyword = list(keyword)
+                keyword[3] = json.dumps(lstAudioPaths)
+                currentSelectedKeyword.set(tuple(keyword))
+
+                if cur.rowcount < 1:
+                    messagebox.error("Trạng thái", "Lưu thất bại")
+                else:
+                    messagebox.showinfo(
+                        title='Đã lưu thành công',
+                        message=filename
+                    )
+                
+            else:
+                messagebox.showinfo(
+                    title='Tập tin đã tồn tại',
+                    message='./audios/' + os.path.basename(filename)
+                )
+
 def deleteImageKeyword(conn, keyword):
     if keyword is not None and len(keyword.get()) > 0:
         filename = listboxImage.get(listboxImage.curselection())
@@ -301,7 +359,7 @@ def deleteVideoKeyword(conn, keyword):
             strVideoPathsToSave = json.dumps(lstVideoPaths)
 
             cur = conn.cursor()
-            cur.execute(f"""UPDATE dict SET images='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+            cur.execute(f"""UPDATE dict SET videos='{strVideoPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
             conn.commit()
             cur.close()
 
@@ -316,6 +374,51 @@ def deleteVideoKeyword(conn, keyword):
                 messagebox.showinfo(
                     title='Đã xoá thành công',
                     message='./videos' + filename
+                )
+
+def deleteAudioKeyword(conn, keyword):
+    if keyword is not None and len(keyword.get()) > 0:
+        filename = listboxAudio.get(listboxAudio.curselection())
+
+        if os.path.exists('./audios/' + filename):
+            # Remove in hard disk
+            os.remove('./audios/' + filename)
+
+            # Remove on UI
+            idx = listboxAudio.get(0, END).index(filename)
+            listboxAudio.delete(idx)
+
+            # Remove on database
+            keyword = literal_eval(keyword.get())
+
+            strAudioPaths = StringVar()
+
+            if keyword[3] == 'None':
+                strAudioPaths.set('[]')
+            else:
+                strAudioPaths.set(keyword[3])
+
+            lstAudioPaths = json.loads(strAudioPaths.get())
+            lstAudioPaths.remove(filename)
+
+            strAudioPathsToSave = json.dumps(lstAudioPaths)
+
+            cur = conn.cursor()
+            cur.execute(f"""UPDATE dict SET audios='{strAudioPathsToSave}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
+            conn.commit()
+            cur.close()
+
+            # save to selected item
+            keyword = list(keyword)
+            keyword[3] = json.dumps(lstAudioPaths)
+            currentSelectedKeyword.set(tuple(keyword))
+
+            if cur.rowcount < 1:
+                messagebox.error("Trạng thái", "Xoá thất bại")
+            else:
+                messagebox.showinfo(
+                    title='Đã xoá thành công',
+                    message='./audios' + filename
                 )
 
 def updateNoteKeyword(conn, keyword, newText):
@@ -583,6 +686,12 @@ def callbackVideo(event):
         value = event.widget.get(selection[0])
         os.startfile(os.path.normpath(os.path.join('./videos/' + value)))
 
+def callbackAudio(event):
+    selection = event.widget.curselection()
+    if selection:
+        value = event.widget.get(selection[0])
+        os.startfile(os.path.normpath(os.path.join('./audios/' + value)))
+
 print('Starting to pre-processing...')
 
 # create a tkinter window
@@ -649,6 +758,9 @@ if os.path.isdir('./videos') is False:
 
 if os.path.isdir('./images') is False:
     os.makedirs('./images')
+
+if os.path.isdir('./audios') is False:
+    os.makedirs('./audios')
 
 if os.path.isdir('./resources') is False:
     os.makedirs('./resources')
@@ -797,6 +909,23 @@ buttonVideo.pack(fill=X)
 
 buttonDeleteVideo = Button(frame_video, text="Xoá video đang chọn", command=lambda : deleteVideoKeyword(conn, currentSelectedKeyword))
 buttonDeleteVideo.pack(fill=X, pady=8)
+
+# set position for audio
+frame_audio = Frame(frame_ImageVideo)
+frame_audio.pack(side=LEFT, padx=10, pady=4)
+
+labelSelectAudio = Label(frame_audio, text="Chọn âm thanh cần nghe")
+labelSelectAudio.pack(fill=X)
+
+listboxAudio = Listbox(frame_audio, height=15)
+listboxAudio.pack(fill=X)
+listboxAudio.bind("<<ListboxSelect>>", callbackAudio)
+
+buttonAudio = Button(frame_audio, text="Cập nhật âm thanh", command=lambda : updateAudioKeyword(conn, currentSelectedKeyword))
+buttonAudio.pack(fill=X)
+
+buttonDeleteAudio = Button(frame_audio, text="Xoá âm thanh đang chọn", command=lambda : deleteAudioKeyword(conn, currentSelectedKeyword))
+buttonDeleteAudio.pack(fill=X, pady=8)
 
 # set position for notes
 frame_note = Frame(scrollable_frame)
