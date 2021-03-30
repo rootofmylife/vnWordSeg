@@ -528,6 +528,21 @@ def updateSpainKeyword(conn, keyword, newText):
 def callbackOneMorpho(event):
     selection = event.widget.curselection()
     if selection:
+        # clear
+        listboxImage.delete(0, END)
+        listboxVideo.delete(0, END)
+        listboxAudio.delete(0, END)
+
+        textNote.delete('1.0', END)
+        textEnglish.delete('1.0', END)
+        textFrance.delete('1.0', END)
+        textRussia.delete('1.0', END)
+        textChinese.delete('1.0', END)
+        textJapan.delete('1.0', END)
+        textKorea.delete('1.0', END)
+        textSpain.delete('1.0', END)
+
+        # end clear
         index = selection[0]
         data = listOneMorpho[index]
         currentSelectedKeyword.set(data)
@@ -604,6 +619,21 @@ def callbackOneMorpho(event):
 def callbackTwoMorpho(event):
     selection = event.widget.curselection()
     if selection:
+        # clear
+        listboxImage.delete(0, END)
+        listboxVideo.delete(0, END)
+        listboxAudio.delete(0, END)
+
+        textNote.delete('1.0', END)
+        textEnglish.delete('1.0', END)
+        textFrance.delete('1.0', END)
+        textRussia.delete('1.0', END)
+        textChinese.delete('1.0', END)
+        textJapan.delete('1.0', END)
+        textKorea.delete('1.0', END)
+        textSpain.delete('1.0', END)
+        
+        # end clear
         index = selection[0]
         data = listTwoMorpho[index]
         currentSelectedKeyword.set(data)
@@ -678,6 +708,21 @@ def callbackTwoMorpho(event):
 def callbackTwoReversedMorpho(event):
     selection = event.widget.curselection()
     if selection:
+        # clear
+        listboxImage.delete(0, END)
+        listboxVideo.delete(0, END)
+        listboxAudio.delete(0, END)
+
+        textNote.delete('1.0', END)
+        textEnglish.delete('1.0', END)
+        textFrance.delete('1.0', END)
+        textRussia.delete('1.0', END)
+        textChinese.delete('1.0', END)
+        textJapan.delete('1.0', END)
+        textKorea.delete('1.0', END)
+        textSpain.delete('1.0', END)
+        
+        # end clear
         index = selection[0]
         data = listReversedTwoMorpho[index]
         currentSelectedKeyword.set(data)
@@ -752,6 +797,21 @@ def callbackTwoReversedMorpho(event):
 def callbackThreeMorpho(event):
     selection = event.widget.curselection()
     if selection:
+        # clear
+        listboxImage.delete(0, END)
+        listboxVideo.delete(0, END)
+        listboxAudio.delete(0, END)
+
+        textNote.delete('1.0', END)
+        textEnglish.delete('1.0', END)
+        textFrance.delete('1.0', END)
+        textRussia.delete('1.0', END)
+        textChinese.delete('1.0', END)
+        textJapan.delete('1.0', END)
+        textKorea.delete('1.0', END)
+        textSpain.delete('1.0', END)
+        
+        # end clear
         index = selection[0]
         data = listThreeMorpho[index]
         currentSelectedKeyword.set(data)
@@ -826,6 +886,21 @@ def callbackThreeMorpho(event):
 def callbackFourMorpho(event):
     selection = event.widget.curselection()
     if selection:
+        # clear
+        listboxImage.delete(0, END)
+        listboxVideo.delete(0, END)
+        listboxAudio.delete(0, END)
+
+        textNote.delete('1.0', END)
+        textEnglish.delete('1.0', END)
+        textFrance.delete('1.0', END)
+        textRussia.delete('1.0', END)
+        textChinese.delete('1.0', END)
+        textJapan.delete('1.0', END)
+        textKorea.delete('1.0', END)
+        textSpain.delete('1.0', END)
+        
+        # end clear
         index = selection[0]
         data = listFourMorpho[index]
         currentSelectedKeyword.set(data)
@@ -900,6 +975,21 @@ def callbackFourMorpho(event):
 def callbackOthersMorpho(event):
     selection = event.widget.curselection()
     if selection:
+        # clear
+        listboxImage.delete(0, END)
+        listboxVideo.delete(0, END)
+        listboxAudio.delete(0, END)
+
+        textNote.delete('1.0', END)
+        textEnglish.delete('1.0', END)
+        textFrance.delete('1.0', END)
+        textRussia.delete('1.0', END)
+        textChinese.delete('1.0', END)
+        textJapan.delete('1.0', END)
+        textKorea.delete('1.0', END)
+        textSpain.delete('1.0', END)
+        
+        # end clear
         index = selection[0]
         data = listOthersMorpho[index]
         currentSelectedKeyword.set(data)
