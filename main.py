@@ -32,6 +32,15 @@ def createConnection(db_file):
 
     return conn
 
+def bound_to_mousewheel(event):
+    canvas.bind_all("<MouseWheel>", on_mousewheel)
+
+def unbound_to_mousewheel(event):
+    canvas.unbind_all("<MouseWheel>")
+
+def on_mousewheel(event):
+    canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
 def queryKeyword(conn, keyword):
     if len(keyword) > 0:
         del listOneMorpho[:]
@@ -323,7 +332,8 @@ def updateNoteKeyword(conn, keyword, newText):
             messagebox.showinfo("Trạng thái", "Đã lưu thành công")
 
 def updateForeignKeyword(conn, keyword):
-    pass
+    if keyword is not None and len(keyword.get()) > 0:
+        pass
 
 def callbackOneMorpho(event):
     selection = event.widget.curselection()
@@ -616,6 +626,8 @@ scrollable_frame.bind(
         scrollregion=canvas.bbox("all")
     )
 )
+scrollable_frame.bind('<Enter>', bound_to_mousewheel)
+scrollable_frame.bind('<Leave>', unbound_to_mousewheel)
 
 canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", tags="my_tag")
 canvas.configure(yscrollcommand=scrollbar.set)
@@ -626,6 +638,7 @@ canvas.bind(
         "my_tag", width=e.width
     )
 )
+canvas.bind_all("<MouseWheel>", on_mousewheel)
 
 ####################################################
 # pack is used to show the object in the window
