@@ -1,6 +1,7 @@
 resources/
 images/
 videos/
+audios/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
