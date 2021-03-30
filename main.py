@@ -100,6 +100,39 @@ def queryKeyword(conn, keyword):
         for othersIndex, othersItem in enumerate(listOthersMorpho):
             listboxOthersMorpho.insert(othersIndex + 1, othersItem[0])
 
+def updateCurrentSelectedKeyword(keyword):
+    if len(keyword) > 0:
+        del listOneMorpho[:]
+        del listTwoMorpho[:]
+        del listReversedTwoMorpho[:]
+        del listThreeMorpho[:]
+        del listFourMorpho[:]
+        del listOthersMorpho[:]
+
+        cur = conn.cursor()
+        row = cur.execute(f"""SELECT * FROM dict WHERE word MATCH '{keyword}' """).fetchall()
+        cur.close()
+
+        for item in row:
+            word = item[0]
+            pos = item[1]
+            definition = item[2]
+
+            if keyword in word:
+                if len(word.strip().split()) == 1:
+                    listOneMorpho.append(item)
+                elif len(word.strip().split()) == 2:
+                    if word.strip().startswith(keyword):
+                        listTwoMorpho.append(item)
+                    else:
+                        listReversedTwoMorpho.append(item)
+                elif len(word.strip().split()) == 3:
+                    listThreeMorpho.append(item)
+                elif len(word.strip().split()) == 4:
+                    listFourMorpho.append(item)
+                else:
+                    listOthersMorpho.append(item)
+
 def updateIndep(indepText):
     with open('./resources/doclap.txt', 'w') as fdl:
         fdl.write(indepText)
@@ -155,6 +188,8 @@ def updateImageKeyword(conn, keyword):
                 keyword = list(keyword)
                 keyword[3] = json.dumps(lstImagePaths)
                 currentSelectedKeyword.set(tuple(keyword))
+
+                updateCurrentSelectedKeyword(userInput.get())
 
                 if cur.rowcount < 1:
                     messagebox.error("Trạng thái", "Lưu thất bại")
@@ -214,6 +249,8 @@ def updateVideoKeyword(conn, keyword):
                 keyword[3] = json.dumps(lstVideoPaths)
                 currentSelectedKeyword.set(tuple(keyword))
 
+                updateCurrentSelectedKeyword(userInput.get())
+
                 if cur.rowcount < 1:
                     messagebox.error("Trạng thái", "Lưu thất bại")
                 else:
@@ -272,6 +309,8 @@ def updateAudioKeyword(conn, keyword):
                 keyword[3] = json.dumps(lstAudioPaths)
                 currentSelectedKeyword.set(tuple(keyword))
 
+                updateCurrentSelectedKeyword(userInput.get())
+
                 if cur.rowcount < 1:
                     messagebox.error("Trạng thái", "Lưu thất bại")
                 else:
@@ -323,6 +362,8 @@ def deleteImageKeyword(conn, keyword):
             keyword[3] = json.dumps(lstImagePaths)
             currentSelectedKeyword.set(tuple(keyword))
 
+            updateCurrentSelectedKeyword(userInput.get())
+
             if cur.rowcount < 1:
                 messagebox.error("Trạng thái", "Xoá thất bại")
             else:
@@ -367,6 +408,8 @@ def deleteVideoKeyword(conn, keyword):
             keyword = list(keyword)
             keyword[3] = json.dumps(lstVideoPaths)
             currentSelectedKeyword.set(tuple(keyword))
+
+            updateCurrentSelectedKeyword(userInput.get())
 
             if cur.rowcount < 1:
                 messagebox.error("Trạng thái", "Xoá thất bại")
@@ -413,6 +456,8 @@ def deleteAudioKeyword(conn, keyword):
             keyword[3] = json.dumps(lstAudioPaths)
             currentSelectedKeyword.set(tuple(keyword))
 
+            updateCurrentSelectedKeyword(userInput.get())
+
             if cur.rowcount < 1:
                 messagebox.error("Trạng thái", "Xoá thất bại")
             else:
@@ -429,6 +474,8 @@ def updateNoteKeyword(conn, keyword, newText):
         conn.commit()
         cur.close()
 
+        updateCurrentSelectedKeyword(userInput.get())
+
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
         else:
@@ -441,6 +488,8 @@ def updateEnglishKeyword(conn, keyword, newText):
         cur.execute(f"""UPDATE dict SET english='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
         conn.commit()
         cur.close()
+
+        updateCurrentSelectedKeyword(userInput.get())
 
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
@@ -455,6 +504,8 @@ def updateFranceKeyword(conn, keyword, newText):
         conn.commit()
         cur.close()
 
+        updateCurrentSelectedKeyword(userInput.get())
+
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
         else:
@@ -467,6 +518,8 @@ def updateRussiaKeyword(conn, keyword, newText):
         cur.execute(f"""UPDATE dict SET russia='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
         conn.commit()
         cur.close()
+
+        updateCurrentSelectedKeyword(userInput.get())
 
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
@@ -481,6 +534,8 @@ def updateChineseKeyword(conn, keyword, newText):
         conn.commit()
         cur.close()
 
+        updateCurrentSelectedKeyword(userInput.get())
+
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
         else:
@@ -493,6 +548,8 @@ def updateJapanKeyword(conn, keyword, newText):
         cur.execute(f"""UPDATE dict SET japan='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
         conn.commit()
         cur.close()
+
+        updateCurrentSelectedKeyword(userInput.get())
 
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
@@ -507,6 +564,8 @@ def updateKoreaKeyword(conn, keyword, newText):
         conn.commit()
         cur.close()
 
+        updateCurrentSelectedKeyword(userInput.get())
+
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
         else:
@@ -519,6 +578,8 @@ def updateSpainKeyword(conn, keyword, newText):
         cur.execute(f"""UPDATE dict SET spain='{newText}' WHERE word='{keyword[0]}' AND POS='{keyword[1]}' AND definition='{keyword[2]}' """)
         conn.commit()
         cur.close()
+
+        updateCurrentSelectedKeyword(userInput.get())
 
         if cur.rowcount < 1:
             messagebox.error("Trạng thái", "Lưu thất bại")
